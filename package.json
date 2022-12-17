@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/KelpGF/NodeJs-Typescript-TDD-DDD-Clean_Architecture-SOLID/issues"
   },
-  "homepage": "https://github.com/KelpGF/NodeJs-Typescript-TDD-DDD-Clean_Architecture-SOLID#readme"
+  "homepage": "https://github.com/KelpGF/NodeJs-Typescript-TDD-DDD-Clean_Architecture-SOLID#readme",
+  "devDependencies": {
+    "git-commit-msg-linter": "^4.4.0"
+  }
 }
