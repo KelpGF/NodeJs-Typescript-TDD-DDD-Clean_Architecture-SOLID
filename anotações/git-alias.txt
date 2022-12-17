@@ -1,0 +1,18 @@
+Aprendendo que é possível adicionar alias nas próprias configurações do git.
+
+Basta encontrar e abrir o arquivo .gitconfig ou utilizar no terminal o comando 'git config --global --edit' 
+
+Obs.: No terminal ele abrirá o nano ou vim (caso Linux), para mudar o editar basta git config --global core.editor editor-name
+
+Como gosto do VSCode utilizei: git config --global core.editor code
+
+Por fim resta adicionar a seção alias e fazer como quiser
+
+Os meus atualmente
+[alias]
+  dev = !git checkout develop 
+  b = !git branch
+  s = !git status -s
+  c = !git commit -m
+  a = !git add .
+  l = !git log --pretty=format:'Commit %C(blue)%h%C(red)%d %C(white)%s - by %C(cyan)%cn, %C(green)%cr'
