@@ -2,6 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npm run lint
-git add .
+git update-index --again
 
 npm run test:staged
