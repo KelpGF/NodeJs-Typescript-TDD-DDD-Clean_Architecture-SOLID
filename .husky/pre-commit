@@ -4,4 +4,4 @@
 npm run lint
 git update-index --again
 
-npm run test:staged
+npm run test:staged -- $(git diff --name-only --cached)
