@@ -15,4 +15,4 @@ Os meus atualmente
   s = !git status -s
   c = !git commit -m
   a = !git add .
-  l = !git log --pretty=format:'Commit %C(blue)%h%C(red)%d %C(white)%s - by %C(cyan)%cn, %C(green)%cr'
+  l = !git log --pretty=format:'%C(magenta)Commit %C(bold blue)%h%C(no-bold red)%d %C(bold yellow)%s - %C(no-bold cyan)by %cn, %C(green)%cr'
