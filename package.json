@@ -4,10 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepare": "husky install && git add .husky/pre-commit",
+    "prepare": "husky install",
     "lint": "eslint 'src/**/*' --fix --no-error-on-unmatched-pattern",
-    "test": "jest --watch",
-    "test:staged": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:unit": "npm test -- --watch -c jest-unit-config.js",
+    "test:integration": "npm test -- --watch -c jest-integration-config.js",
+    "test:staged": "npm test",
+    "test:ci": "npm test -- --coverage",
+    "test:verbose": "jest --passWithNoTests --runInBand"
   },
   "repository": {
     "type": "git",
