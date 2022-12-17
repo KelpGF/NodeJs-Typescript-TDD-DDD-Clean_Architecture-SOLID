@@ -5,7 +5,7 @@ import { SignUpController } from './signup'
 const makeSut = (): Controller => new SignUpController()
 
 describe('SignUp Controller', () => {
-  test('Should return status code if no name provided', () => {
+  test('Should return 400 if no name provided', () => {
     const sut = makeSut()
 
     const httpRequest = {
@@ -22,7 +22,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('name'))
   })
 
-  test('Should return status code if no email provided', () => {
+  test('Should return 400 if no email provided', () => {
     const sut = makeSut()
 
     const httpRequest = {
@@ -39,7 +39,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('email'))
   })
 
-  test('Should return status code if no password provided', () => {
+  test('Should return 400 if no password provided', () => {
     const sut = makeSut()
 
     const httpRequest = {
@@ -56,7 +56,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
-  test('Should return status code if no passwordConfirmation provided', () => {
+  test('Should return 400 if no password confirmation provided', () => {
     const sut = new SignUpController()
 
     const httpRequest = {
