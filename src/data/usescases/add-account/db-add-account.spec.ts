@@ -102,4 +102,23 @@ describe('DBAddAccount UseCase', () => {
 
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return an account on success', async () => {
+    const { sut } = makeSut()
+
+    const accountData: AddAccountModel = {
+      email: 'valid_email@gmail.com',
+      name: 'valid_name',
+      password: 'valid_password'
+    }
+
+    const account = await sut.add(accountData)
+
+    expect(account).toEqual({
+      id: 'valid_id',
+      email: accountData.email,
+      name: account.name,
+      password: 'hashed_password'
+    })
+  })
 })
