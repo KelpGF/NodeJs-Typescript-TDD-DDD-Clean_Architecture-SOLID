@@ -10,7 +10,14 @@ describe('Log Controller Decorator', () => {
   const makeStubController = (): Controller => {
     class StubController implements Controller {
       async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-        return await Promise.resolve(null as unknown as HttpResponse)
+        const httpResponse: HttpResponse = {
+          body: {
+            name: 'any_name'
+          },
+          statusCode: 200
+        }
+
+        return httpResponse
       }
     }
 
@@ -36,6 +43,26 @@ describe('Log Controller Decorator', () => {
     }
     await sut.handle(httpRequest)
 
-    expect(spyStubHandle).toHaveBeenLastCalledWith(httpRequest)
+    expect(spyStubHandle).toHaveBeenCalledWith(httpRequest)
+  })
+
+  test('Should LogControllerDecorator return the same result of the controller', async () => {
+    const { sut } = makeSut()
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email',
+        password: 'any_password',
+        passwordConfirmation: 'any_confirmation_password'
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual({
+      body: {
+        name: 'any_name'
+      },
+      statusCode: 200
+    })
   })
 })
