@@ -6,8 +6,8 @@ export const expressRoutesAdapter = (controller: Controller) => {
     const httpRequest: HttpRequest = {
       body: req.body
     }
-    const httpResponse = await controller.handle(httpRequest)
+    const { statusCode, body } = await controller.handle(httpRequest)
 
-    res.status(httpResponse.statusCode).json(httpResponse.body)
+    res.status(statusCode).json(statusCode !== 200 ? { error: body.message } : body)
   }
 }
