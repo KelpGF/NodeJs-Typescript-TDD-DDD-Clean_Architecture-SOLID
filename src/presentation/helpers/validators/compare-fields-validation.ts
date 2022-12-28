@@ -11,6 +11,6 @@ export class CompareFieldsValidation implements Validation {
   }
 
   validate (input: any): Error | null {
-    return input[this.fieldName] !== input[this.fieldToCompareName] ? new InvalidParamError(this.fieldName) : null
+    return input[this.fieldName] !== input[this.fieldToCompareName] ? new InvalidParamError(this.fieldToCompareName) : null
   }
 }
