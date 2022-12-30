@@ -92,9 +92,7 @@ describe('Login Controller', () => {
 
   test('Should return 500 if Validation throws', async () => {
     const { sut, validationStub } = makeSut()
-    jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => {
-      throw new Error()
-    })
+    jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => { throw new Error() })
     const httpResponse = await sut.handle(makeFakeRequest())
 
     expect(httpResponse).toEqual(internalServerError(new Error()))
