@@ -1,5 +1,10 @@
+import { Collection } from 'mongodb'
+import { AccountModel } from '../../../../domain/models/account'
+import { AddAccountModel } from '../../../../domain/usecases/add-account'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account'
+
+let accountCollection: Collection
 
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
@@ -7,7 +12,7 @@ describe('Account Mongo Repository', () => {
   })
 
   beforeEach(async () => {
-    const accountCollection = await MongoHelper.getCollection('accounts')
+    accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
 
@@ -18,19 +23,32 @@ describe('Account Mongo Repository', () => {
   const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
   }
+  const makeFakeAddAccountModel = (): AddAccountModel => ({
+    name: 'any_name',
+    email: 'any_email',
+    password: 'any_password'
+  })
 
-  test('Should return an account on success', async () => {
+  test('Should return an account on add success', async () => {
     const sut = makeSut()
-    const mockAccount = {
-      name: 'any_name',
-      email: 'any_email',
-      password: 'any_password'
-    }
-    const account = await sut.add(mockAccount)
+    const fakeAddAccountModel = makeFakeAddAccountModel()
+    const account = await sut.add(fakeAddAccountModel)
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
-    expect(account.name).toBe(mockAccount.name)
-    expect(account.email).toBe(mockAccount.email)
-    expect(account.password).toBe(mockAccount.password)
+    expect(account.name).toBe(fakeAddAccountModel.name)
+    expect(account.email).toBe(fakeAddAccountModel.email)
+    expect(account.password).toBe(fakeAddAccountModel.password)
+  })
+
+  test('Should return an account on find by email success', async () => {
+    const fakeAddAccountModel = makeFakeAddAccountModel()
+    await accountCollection.insertOne(fakeAddAccountModel)
+    const sut = makeSut()
+    const account = await sut.findByEmail(fakeAddAccountModel.email) as AccountModel
+    expect(account).toBeTruthy()
+    expect(account.id).toBeTruthy()
+    expect(account.email).toBe(fakeAddAccountModel.email)
+    expect(account.name).toBe(fakeAddAccountModel.name)
+    expect(account.password).toBe(fakeAddAccountModel.password)
   })
 })
