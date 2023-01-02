@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  mongodb:
+    container_name: mongodb-container
+    image: mongo:4
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 21017:21017
+
+  api:
+    container_name: api-container
+    build: .
+    image: ts-tdd-ddd-clean_architecture-solid
+    command: npm start
+    restart: always
+    volumes:
+      - ./dist:/usr/projects/studies/ts-tdd-ddd-clean_architecture-solid/dist
+    ports:
+      - 5050:5050
+    links:
+      - mongodb
+    environment:
+      PORT: 5050
+      JWT_SECRET: 'AXQ17*!#634R1S'
+      MONGO_CONNECT_URL: 'mongodb://mongodb:27017/test'
