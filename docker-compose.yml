@@ -14,12 +14,14 @@ services:
     container_name: api-container
     build: .
     image: ts-tdd-ddd-clean_architecture-solid
-    command: npm start
+    command: npm run debug
     restart: always
     volumes:
-      - ./dist:/usr/projects/studies/ts-tdd-ddd-clean_architecture-solid/dist
+      - ./dist:/usr/src/studies/ts-tdd-ddd-clean_architecture-solid/dist
+      - ./package.json:/usr/src/studies/ts-tdd-ddd-clean_architecture-solid/package.json
     ports:
       - 5050:5050
+      - 9222:9222
     links:
       - mongodb
     environment:
