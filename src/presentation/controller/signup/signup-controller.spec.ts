@@ -83,10 +83,10 @@ describe('SignUp Controller', () => {
     expect(httpResponse).toEqual(internalServerError(new InternalServerError('')))
   })
 
-  test('Should returns 200 if valid data provided', async () => {
+  test('Should return 200 with accessToken on success', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(ok(makeFakeAccount()))
+    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
   })
 
   test('Should call Validation with correct value', async () => {
