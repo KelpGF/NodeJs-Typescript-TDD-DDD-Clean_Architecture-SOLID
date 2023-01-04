@@ -1,6 +1,6 @@
 {
   "name": "ts-tdd-ddd-clean_architecture-solid",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "description": "",
   "main": "index.js",
   "scripts": {
