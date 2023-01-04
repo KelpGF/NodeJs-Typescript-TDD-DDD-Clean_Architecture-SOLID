@@ -12,9 +12,9 @@ services:
 
   api:
     container_name: api-container
-    build: .
-    image: ts-tdd-ddd-clean_architecture-solid
-    command: npm run debug
+    image: node:18
+    working_dir: /usr/src/studies/ts-tdd-ddd-clean_architecture-solid
+    command: bash -c "npm install --omit=dev && npm run debug"
     restart: always
     volumes:
       - ./dist:/usr/src/studies/ts-tdd-ddd-clean_architecture-solid/dist
