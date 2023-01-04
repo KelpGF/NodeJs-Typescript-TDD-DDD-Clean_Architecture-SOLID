@@ -1,4 +1,4 @@
-import { AccountModel, AddAccountModel, AddAccountRepository, Hasher } from './db-add-account-protocols'
+import { AccountModel, AddAccount, AddAccountModel, AddAccountRepository, Hasher } from './db-add-account-protocols'
 import { DBAddAccount } from './db-add-account'
 import { FindAccountByEmailRepository } from '../authentication/db-authentication-protocols'
 
@@ -46,7 +46,7 @@ const makeFakeAddAccountData = (): AddAccountModel => ({
 })
 
 interface SutTypes {
-  sut: AddAccountRepository
+  sut: AddAccount
   hasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
   findAccountByEmailRepositoryStub: FindAccountByEmailRepository
@@ -72,7 +72,7 @@ describe('DBAddAccount UseCase', () => {
 
   test('Should throw if Hasher throws', async () => {
     const { sut, hasherStub } = makeSut()
-    jest.spyOn(hasherStub, 'hash').mockResolvedValueOnce(Promise.reject(new Error()))
+    jest.spyOn(hasherStub, 'hash').mockRejectedValueOnce(new Error())
     const promise = sut.add(makeFakeAddAccountData())
 
     await expect(promise).rejects.toThrow()
@@ -93,7 +93,7 @@ describe('DBAddAccount UseCase', () => {
 
   test('Should throw if AddAccountRepository throws', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
-    jest.spyOn(addAccountRepositoryStub, 'add').mockResolvedValueOnce(Promise.reject(new Error()))
+    jest.spyOn(addAccountRepositoryStub, 'add').mockRejectedValueOnce(new Error())
     const promise = sut.add(makeFakeAddAccountData())
 
     await expect(promise).rejects.toThrow()
@@ -112,5 +112,12 @@ describe('DBAddAccount UseCase', () => {
     const fakeAddAccountData = makeFakeAddAccountData()
     await sut.add(fakeAddAccountData)
     expect(findByEmailSpy).toHaveBeenCalledWith(fakeAddAccountData.email)
+  })
+
+  test('Should return null if FindAccountByEmailRepository not returns null', async () => {
+    const { sut, findAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(findAccountByEmailRepositoryStub, 'findByEmail').mockResolvedValueOnce(makeFakeAccount())
+    const result = await sut.add(makeFakeAddAccountData())
+    expect(result).toBeNull()
   })
 })
