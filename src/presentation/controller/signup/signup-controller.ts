@@ -1,4 +1,4 @@
-import { badRequest, internalServerError, ok, unauthorizedError } from '../../helpers/http/http-helper'
+import { badRequest, internalServerError, ok } from '../../helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse, AddAccount, Validation, Authentication } from './signup-controller-protocols'
 
 export class SignUpController implements Controller {
@@ -16,8 +16,7 @@ export class SignUpController implements Controller {
       const { name, email, password } = httpRequest.body
       const newAccount = await this.addAccount.add({ name, email, password })
 
-      const accessToken = await this.authentication.auth({ email, password })
-      if (!accessToken) return unauthorizedError()
+      await this.authentication.auth({ email, password })
 
       return ok(newAccount)
     } catch (err) {

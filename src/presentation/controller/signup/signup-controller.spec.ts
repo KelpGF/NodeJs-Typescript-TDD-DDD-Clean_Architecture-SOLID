@@ -1,7 +1,7 @@
 import { SignUpController } from './signup-controller'
 import { Controller, Validation, AccountModel, AddAccount, AddAccountModel, HttpRequest, Authentication, AuthenticationModel } from './signup-controller-protocols'
 import { MissingParamError, InternalServerError } from '../../errors'
-import { badRequest, internalServerError, ok, unauthorizedError } from '../../helpers/http/http-helper'
+import { badRequest, internalServerError, ok } from '../../helpers/http/http-helper'
 
 const makeAddAccountStub = (): AddAccount => {
   class AddAccountStub implements AddAccount {
@@ -121,14 +121,6 @@ describe('SignUp Controller', () => {
     await sut.handle(httpRequest)
 
     expect(authSpy).toHaveBeenCalledWith({ email: httpRequest.body.email, password: httpRequest.body.password })
-  })
-
-  test('Should return 401 if invalid credentials provider', async () => {
-    const { sut, authenticationStub } = makeSut()
-    jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(Promise.resolve(null))
-
-    const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(unauthorizedError())
   })
 
   test('Should return 500 if Authentication throws', async () => {
