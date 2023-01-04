@@ -1,5 +1,6 @@
 import { AccountModel, AddAccountModel, AddAccountRepository, Hasher } from './db-add-account-protocols'
 import { DBAddAccount } from './db-add-account'
+import { FindAccountByEmailRepository } from '../authentication/db-authentication-protocols'
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -23,6 +24,15 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 
   return addAccountRepositoryStub
 }
+const makeFindAccountByEmailRepositoryStub = (): FindAccountByEmailRepository => {
+  class FindAccountByEmailRepositoryStub implements FindAccountByEmailRepository {
+    async findByEmail (email: string): Promise<AccountModel | null> {
+      return null
+    }
+  }
+
+  return new FindAccountByEmailRepositoryStub()
+}
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid_name',
@@ -39,13 +49,15 @@ interface SutTypes {
   sut: AddAccountRepository
   hasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
+  findAccountByEmailRepositoryStub: FindAccountByEmailRepository
 }
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
-  const sut = new DBAddAccount(hasherStub, addAccountRepositoryStub)
+  const findAccountByEmailRepositoryStub = makeFindAccountByEmailRepositoryStub()
+  const sut = new DBAddAccount(hasherStub, addAccountRepositoryStub, findAccountByEmailRepositoryStub)
 
-  return { sut, hasherStub, addAccountRepositoryStub }
+  return { sut, hasherStub, addAccountRepositoryStub, findAccountByEmailRepositoryStub }
 }
 
 describe('DBAddAccount UseCase', () => {
@@ -92,5 +104,13 @@ describe('DBAddAccount UseCase', () => {
     const account = await sut.add(makeFakeAddAccountData())
 
     expect(account).toEqual(makeFakeAccount())
+  })
+
+  test('Should call FindAccountByEmailRepository if correct email', async () => {
+    const { sut, findAccountByEmailRepositoryStub } = makeSut()
+    const findByEmailSpy = jest.spyOn(findAccountByEmailRepositoryStub, 'findByEmail').mockResolvedValueOnce(makeFakeAccount())
+    const fakeAddAccountData = makeFakeAddAccountData()
+    await sut.add(fakeAddAccountData)
+    expect(findByEmailSpy).toHaveBeenCalledWith(fakeAddAccountData.email)
   })
 })
