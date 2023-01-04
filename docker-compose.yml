@@ -17,7 +17,7 @@ services:
     command: bash -c "npm install --omit=dev && npm run debug"
     restart: always
     volumes:
-      - ./dist:/usr/src/studies/ts-tdd-ddd-clean_architecture-solid/dist
+      - ./dist/:/usr/src/studies/ts-tdd-ddd-clean_architecture-solid/dist/
       - ./package.json:/usr/src/studies/ts-tdd-ddd-clean_architecture-solid/package.json
     ports:
       - 5050:5050
