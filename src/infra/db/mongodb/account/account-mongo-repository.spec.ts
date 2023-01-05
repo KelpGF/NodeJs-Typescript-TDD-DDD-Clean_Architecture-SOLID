@@ -1,6 +1,6 @@
 import { Collection } from 'mongodb'
 import { AccountModel } from '../../../../domain/models/account'
-import { AddAccountModel } from '../../../../domain/usecases/add-account'
+import { InsertAccountModel } from '../../../../domain/usecases/add-account'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account-mongo-repository'
 
@@ -23,16 +23,16 @@ describe('Account Mongo Repository', () => {
   const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
   }
-  const makeFakeAddAccountModel = (): AddAccountModel => ({
+  const makeFakeAddAccountModel = (): InsertAccountModel => ({
     name: 'any_name',
     email: 'any_email',
     password: 'any_password'
   })
 
-  test('Should return an account on add success', async () => {
+  test('Should return an account on insert success', async () => {
     const sut = makeSut()
     const fakeAddAccountModel = makeFakeAddAccountModel()
-    const account = await sut.add(fakeAddAccountModel)
+    const account = await sut.insert(fakeAddAccountModel)
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
     expect(account.name).toBe(fakeAddAccountModel.name)
@@ -60,7 +60,7 @@ describe('Account Mongo Repository', () => {
 
   test('Should update the account accessToken on updateAccessToken success', async () => {
     const sut = makeSut()
-    const fakeAccount = await sut.add(makeFakeAddAccountModel())
+    const fakeAccount = await sut.insert(makeFakeAddAccountModel())
     expect(fakeAccount?.accessToken).toBeFalsy()
     await sut.updateAccessToken(fakeAccount.id, 'any_token')
     const updatedAccount = await accountCollection.findOne({ _id: fakeAccount.id })
