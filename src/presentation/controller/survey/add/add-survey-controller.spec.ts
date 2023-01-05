@@ -26,7 +26,7 @@ const makeValidationStub = (): Validation => {
 
 const makeAddSurveyStub = (): AddSurvey => {
   class AddSurveyStub implements AddSurvey {
-    async add (account: InsertSurveyModel): Promise<void> {}
+    async add (survey: InsertSurveyModel): Promise<void> {}
   }
   return new AddSurveyStub()
 }
