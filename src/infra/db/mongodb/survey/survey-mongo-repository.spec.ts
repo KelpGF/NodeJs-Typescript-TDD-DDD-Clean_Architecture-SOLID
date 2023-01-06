@@ -10,7 +10,7 @@ describe('Survey MongoRepository', () => {
     await MongoHelper.connect(String(process.env.MONGO_URL))
   })
   beforeEach(async () => {
-    surveyCollection = await MongoHelper.getCollection('survey')
+    surveyCollection = await MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
   })
   afterAll(async () => {
