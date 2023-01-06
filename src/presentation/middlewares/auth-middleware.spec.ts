@@ -13,7 +13,7 @@ const makeFakeAccount = (): AccountModel => ({
 })
 const makeFindAccountByTokenStub = (): FindAccountByToken => {
   class FindAccountByTokenStub implements FindAccountByToken {
-    async find (accessToken: string): Promise<AccountModel> {
+    async find (accessToken: string): Promise<AccountModel | null> {
       return makeFakeAccount()
     }
   }
@@ -47,5 +47,12 @@ describe('Auth Middleware', () => {
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(findSpy).toHaveBeenCalledWith(httpRequest.headers['x-access-token'])
+  })
+
+  test('Should return 403 if FindAccountByToken returns null', async () => {
+    const { sut, findAccountByTokenStub } = makeSut()
+    jest.spyOn(findAccountByTokenStub, 'find').mockResolvedValueOnce(null)
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
   })
 })
