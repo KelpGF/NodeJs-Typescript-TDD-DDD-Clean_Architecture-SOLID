@@ -8,6 +8,6 @@ export const expressRoutesAdapter = (controller: Controller) => {
     }
     const { statusCode, body } = await controller.handle(httpRequest)
 
-    res.status(statusCode).json(statusCode !== 200 ? { error: body.message } : body)
+    res.status(statusCode).json(statusCode >= 200 && statusCode <= 299 ? body : { error: body.message })
   }
 }
