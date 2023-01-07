@@ -3,7 +3,9 @@ import { Decrypter } from '../../protocols/cryptography/decrypter'
 
 const makeDecrypterStub = (): Decrypter => {
   class DecrypterStub implements Decrypter {
-    async decrypt (value: string): Promise<any> {}
+    async decrypt (value: string): Promise<string | null> {
+      return 'any_value'
+    }
   }
 
   return new DecrypterStub()
@@ -26,5 +28,12 @@ describe('DbFindAccountByToken UseCase', () => {
     const decryptSpy = jest.spyOn(decrypter, 'decrypt')
     await sut.find('any_token')
     expect(decryptSpy).toHaveBeenCalledWith('any_token')
+  })
+
+  test('Should return null if Decrypter returns null', async () => {
+    const { sut, decrypter } = makeSut()
+    jest.spyOn(decrypter, 'decrypt').mockResolvedValueOnce(null)
+    const account = await sut.find('any_token')
+    expect(account).toBeNull()
   })
 })
