@@ -1,6 +1,12 @@
 import { DbFindAccountByToken } from './db-find-account-by-token'
-import { Decrypter } from '../../protocols/cryptography/decrypter'
+import { AccountModel, Decrypter, FindAccountByTokenRepository } from './db-find-account-by-token-protocol'
 
+const makeFakeAccount = (): AccountModel => ({
+  id: 'any_id',
+  email: 'any_email@mail.com',
+  name: 'any_name',
+  password: 'hashed_pass'
+})
 const makeDecrypterStub = (): Decrypter => {
   class DecrypterStub implements Decrypter {
     async decrypt (value: string): Promise<string | null> {
@@ -10,30 +16,48 @@ const makeDecrypterStub = (): Decrypter => {
 
   return new DecrypterStub()
 }
+const makeFindAccountByTokenRepositoryStub = (): FindAccountByTokenRepository => {
+  class FindAccountByTokenRepositoryStub implements FindAccountByTokenRepository {
+    async findByToken (token: string): Promise<AccountModel | null> {
+      return makeFakeAccount()
+    }
+  }
+
+  return new FindAccountByTokenRepositoryStub()
+}
 
 interface SutTypes {
   sut: DbFindAccountByToken
-  decrypter: Decrypter
+  decrypterStub: Decrypter
+  findAccountByTokenRepositoryStub: FindAccountByTokenRepository
 }
 const makeSut = (): SutTypes => {
-  const decrypter = makeDecrypterStub()
-  const sut = new DbFindAccountByToken(decrypter)
+  const decrypterStub = makeDecrypterStub()
+  const findAccountByTokenRepositoryStub = makeFindAccountByTokenRepositoryStub()
+  const sut = new DbFindAccountByToken(decrypterStub, findAccountByTokenRepositoryStub)
 
-  return { sut, decrypter }
+  return { sut, decrypterStub, findAccountByTokenRepositoryStub }
 }
 
 describe('DbFindAccountByToken UseCase', () => {
   test('Should call Decrypter with correct values', async () => {
-    const { sut, decrypter } = makeSut()
-    const decryptSpy = jest.spyOn(decrypter, 'decrypt')
+    const { sut, decrypterStub } = makeSut()
+    const decryptSpy = jest.spyOn(decrypterStub, 'decrypt')
     await sut.find('any_token')
     expect(decryptSpy).toHaveBeenCalledWith('any_token')
   })
 
   test('Should return null if Decrypter returns null', async () => {
-    const { sut, decrypter } = makeSut()
-    jest.spyOn(decrypter, 'decrypt').mockResolvedValueOnce(null)
+    const { sut, decrypterStub } = makeSut()
+    jest.spyOn(decrypterStub, 'decrypt').mockResolvedValueOnce(null)
     const account = await sut.find('any_token')
     expect(account).toBeNull()
+  })
+
+  test('Should call FindAccountByToken with correct id', async () => {
+    const { sut, findAccountByTokenRepositoryStub } = makeSut()
+    const findByTokenSpy = jest.spyOn(findAccountByTokenRepositoryStub, 'findByToken')
+    await sut.find('any_token')
+    expect(findByTokenSpy).toHaveBeenCalledWith('any_value')
   })
 })
