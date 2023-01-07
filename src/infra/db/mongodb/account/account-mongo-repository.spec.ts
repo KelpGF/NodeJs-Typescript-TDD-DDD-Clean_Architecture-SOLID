@@ -73,4 +73,17 @@ describe('Account Mongo Repository', () => {
       expect(updatedAccount?.accessToken).toBe('any_token')
     })
   })
+  describe('findByToken()', () => {
+    test('Should return an account on findByToken without role', async () => {
+      const fakeAddAccountModel = makeFakeAddAccountModel()
+      await accountCollection.insertOne({ ...fakeAddAccountModel, accessToken: 'any_token' })
+      const sut = makeSut()
+      const account = await sut.findByToken('any_token') as AccountModel
+      expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
+      expect(account.email).toBe(fakeAddAccountModel.email)
+      expect(account.name).toBe(fakeAddAccountModel.name)
+      expect(account.password).toBe(fakeAddAccountModel.password)
+    })
+  })
 })
