@@ -68,4 +68,10 @@ describe('DbFindAccountByToken UseCase', () => {
     const account = await sut.find('any_token')
     expect(account).toBeNull()
   })
+
+  test('Should an account on succeeds', async () => {
+    const { sut } = makeSut()
+    const account = await sut.find('any_token')
+    expect(account).toEqual(makeFakeAccount())
+  })
 })
