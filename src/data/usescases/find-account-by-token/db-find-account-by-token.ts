@@ -1,4 +1,4 @@
-import { FindAccountByToken, Decrypter, AccountModel, FindAccountByTokenRepository } from './db-find-account-by-token-protocol'
+import { FindAccountByToken, Decrypter, AccountModel, FindAccountByTokenRepository } from './db-find-account-by-token-protocols'
 
 export class DbFindAccountByToken implements FindAccountByToken {
   constructor (

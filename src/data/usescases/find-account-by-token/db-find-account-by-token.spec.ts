@@ -1,5 +1,5 @@
 import { DbFindAccountByToken } from './db-find-account-by-token'
-import { AccountModel, Decrypter, FindAccountByTokenRepository } from './db-find-account-by-token-protocol'
+import { AccountModel, Decrypter, FindAccountByTokenRepository } from './db-find-account-by-token-protocols'
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'any_id',
