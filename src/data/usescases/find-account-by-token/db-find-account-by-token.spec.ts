@@ -66,7 +66,7 @@ describe('DbFindAccountByToken UseCase', () => {
     const { sut, findAccountByTokenRepositoryStub } = makeSut()
     const findByTokenSpy = jest.spyOn(findAccountByTokenRepositoryStub, 'findByToken')
     await sut.find('any_token', role)
-    expect(findByTokenSpy).toHaveBeenCalledWith('any_value', role)
+    expect(findByTokenSpy).toHaveBeenCalledWith('any_token', role)
   })
 
   test('Should return null if FindAccountByTokenRepository returns null', async () => {
