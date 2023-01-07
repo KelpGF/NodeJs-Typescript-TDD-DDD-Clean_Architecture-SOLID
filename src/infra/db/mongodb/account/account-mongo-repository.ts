@@ -32,8 +32,12 @@ implements
   }
 
   async findByToken (token: string, role?: string): Promise<AccountModel | null> {
+    const query = {
+      accessToken: token,
+      role: { $in: [role, 'admin'] }
+    }
     const accountCollection = await MongoHelper.getCollection('accounts')
-    const account: AccountDocument = await accountCollection.findOne<AccountDocument>({ accessToken: token, role }) as AccountDocument
+    const account: AccountDocument = await accountCollection.findOne<AccountDocument>(query) as AccountDocument
     return account && MongoHelper.map(account)
   }
 }

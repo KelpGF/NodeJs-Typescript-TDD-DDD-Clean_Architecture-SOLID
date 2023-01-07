@@ -87,11 +87,31 @@ describe('Account Mongo Repository', () => {
       expect(account.password).toBe(fakeAddAccountModel.password)
     })
 
-    test('Should return an account on findByToken with role', async () => {
+    test('Should return an account on findByToken with admin role', async () => {
       const fakeAddAccountModel = makeFakeAddAccountModel()
-      await accountCollection.insertOne({ ...fakeAddAccountModel, accessToken: 'any_token', role: 'any_role' })
+      await accountCollection.insertOne({ ...fakeAddAccountModel, accessToken: 'any_token', role: 'admin' })
       const sut = makeSut()
-      const account = await sut.findByToken('any_token', 'any_role') as AccountModel
+      const account = await sut.findByToken('any_token', 'admin') as AccountModel
+      expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
+      expect(account.email).toBe(fakeAddAccountModel.email)
+      expect(account.name).toBe(fakeAddAccountModel.name)
+      expect(account.password).toBe(fakeAddAccountModel.password)
+    })
+
+    test('Should return null on findByToken with invalid role', async () => {
+      const fakeAddAccountModel = makeFakeAddAccountModel()
+      await accountCollection.insertOne({ ...fakeAddAccountModel, accessToken: 'any_token' })
+      const sut = makeSut()
+      const account = await sut.findByToken('any_token', 'admin') as AccountModel
+      expect(account).toBeFalsy()
+    })
+
+    test('Should return an account on findByToken if user is admin', async () => {
+      const fakeAddAccountModel = makeFakeAddAccountModel()
+      await accountCollection.insertOne({ ...fakeAddAccountModel, accessToken: 'any_token', role: 'admin' })
+      const sut = makeSut()
+      const account = await sut.findByToken('any_token') as AccountModel
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.email).toBe(fakeAddAccountModel.email)
