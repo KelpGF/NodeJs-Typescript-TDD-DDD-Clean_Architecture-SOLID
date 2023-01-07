@@ -54,10 +54,11 @@ describe('DbFindAccountByToken UseCase', () => {
     expect(account).toBeNull()
   })
 
-  test('Should call FindAccountByToken with correct id', async () => {
+  test('Should call FindAccountByTokenRepository with correct value', async () => {
+    const role = 'any_role'
     const { sut, findAccountByTokenRepositoryStub } = makeSut()
     const findByTokenSpy = jest.spyOn(findAccountByTokenRepositoryStub, 'findByToken')
-    await sut.find('any_token')
-    expect(findByTokenSpy).toHaveBeenCalledWith('any_value')
+    await sut.find('any_token', role)
+    expect(findByTokenSpy).toHaveBeenCalledWith('any_value', role)
   })
 })
