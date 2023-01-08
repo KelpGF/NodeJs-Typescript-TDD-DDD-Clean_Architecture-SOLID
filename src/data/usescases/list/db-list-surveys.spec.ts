@@ -60,4 +60,11 @@ describe('DbListSurveys UseCase', () => {
     const surveys = await sut.list()
     expect(surveys).toEqual(makeFakeSurveys())
   })
+
+  test('Should throw if FindSurveysRepository throws', async () => {
+    const { sut, findSurveysRepositoryStub } = makeSut()
+    jest.spyOn(findSurveysRepositoryStub, 'findAll').mockRejectedValueOnce(new Error())
+    const promise = sut.list()
+    await expect(promise).rejects.toThrow()
+  })
 })
