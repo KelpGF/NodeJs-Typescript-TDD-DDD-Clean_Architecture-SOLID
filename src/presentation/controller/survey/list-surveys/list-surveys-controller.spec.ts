@@ -1,7 +1,7 @@
 import { ListSurveyController } from './list-surveys-controller'
 import { ListSurvey, SurveyModel } from './list-surveys-controller-protocols'
 import MockDate from 'mockdate'
-import { ok } from '../../../helpers/http/http-helper'
+import { internalServerError, ok } from '../../../helpers/http/http-helper'
 
 const makeFakeSurveys = (): SurveyModel[] => ([
   {
@@ -59,5 +59,12 @@ describe('ListSurveys Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(ok(makeFakeSurveys()))
+  })
+
+  test('Should return 500 if ListSurveys throws', async () => {
+    const { sut, listSurveyStub } = makeSut()
+    jest.spyOn(listSurveyStub, 'list').mockRejectedValueOnce(new Error())
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(internalServerError(new Error()))
   })
 })
