@@ -5,6 +5,21 @@ import { SurveyMongoRepository } from './survey-mongo-repository'
 
 let surveyCollection: Collection
 
+const makeSut = (): SurveyMongoRepository => new SurveyMongoRepository()
+const makeSurveyData = (): InsertSurveyModel => ({
+  question: 'any_question',
+  answers: [
+    {
+      answer: 'any_answer',
+      image: 'any_image'
+    },
+    {
+      answer: 'other_any_answer'
+    }
+  ],
+  date: new Date()
+})
+
 describe('Survey MongoRepository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(String(process.env.MONGO_URL))
@@ -17,25 +32,12 @@ describe('Survey MongoRepository', () => {
     await MongoHelper.disconnect()
   })
 
-  const makeSut = (): SurveyMongoRepository => new SurveyMongoRepository()
-  const makeSurveyData = (): InsertSurveyModel => ({
-    question: 'any_question',
-    answers: [
-      {
-        answer: 'any_answer',
-        image: 'any_image'
-      },
-      {
-        answer: 'other_any_answer'
-      }
-    ],
-    date: new Date()
-  })
-
-  test('Should insert a survey on insert success', async () => {
-    const sut = makeSut()
-    await sut.insert(makeSurveyData())
-    const survey = await surveyCollection.findOne({ question: 'any_question' })
-    expect(survey).toBeTruthy()
+  describe('add()', () => {
+    test('Should insert a survey on insert success', async () => {
+      const sut = makeSut()
+      await sut.insert(makeSurveyData())
+      const survey = await surveyCollection.findOne({ question: 'any_question' })
+      expect(survey).toBeTruthy()
+    })
   })
 })
