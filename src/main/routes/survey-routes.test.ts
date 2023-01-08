@@ -10,7 +10,7 @@ import env from '../config/env'
 let surveyCollection: Collection
 let accountCollection: Collection
 
-const makeFakeAddSurvey = (): InsertSurveyModel => ({
+const makeFakeAddSurvey = (): Partial<InsertSurveyModel> => ({
   question: 'Question',
   answers: [
     {

@@ -28,7 +28,8 @@ describe('Survey MongoRepository', () => {
       {
         answer: 'other_any_answer'
       }
-    ]
+    ],
+    date: new Date()
   })
 
   test('Should insert a survey on insert success', async () => {

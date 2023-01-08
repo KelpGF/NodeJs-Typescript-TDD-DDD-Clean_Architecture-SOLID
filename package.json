@@ -51,6 +51,7 @@
     "git-commit-msg-linter": "^4.4.0",
     "husky": "^8.0.2",
     "jest": "^29.3.1",
+    "mockdate": "^3.0.5",
     "rimraf": "^3.0.2",
     "sucrase": "^3.29.0",
     "supertest": "^6.3.3",
