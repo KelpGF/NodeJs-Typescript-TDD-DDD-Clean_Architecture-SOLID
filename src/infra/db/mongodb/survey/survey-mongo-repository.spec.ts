@@ -40,4 +40,18 @@ describe('Survey MongoRepository', () => {
       expect(survey).toBeTruthy()
     })
   })
+
+  describe('findAll()', () => {
+    test('Should find all on success', async () => {
+      await surveyCollection.insertMany([
+        makeSurveyData(),
+        { ...makeSurveyData(), question: 'other_question' }
+      ])
+      const sut = makeSut()
+      const surveys = await sut.findAll()
+      expect(surveys.length).toBe(2)
+      expect(surveys[0].question).toBe('any_question')
+      expect(surveys[1].question).toBe('other_question')
+    })
+  })
 })
