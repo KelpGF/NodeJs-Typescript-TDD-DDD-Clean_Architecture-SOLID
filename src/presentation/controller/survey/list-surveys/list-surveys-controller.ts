@@ -7,7 +7,7 @@ export class ListSurveyController implements Controller {
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    await this.listSurvey.list()
-    return ok([])
+    const surveys = await this.listSurvey.list()
+    return ok(surveys)
   }
 }
