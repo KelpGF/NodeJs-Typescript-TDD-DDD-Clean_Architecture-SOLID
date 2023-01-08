@@ -1,6 +1,7 @@
 import { ListSurveyController } from './list-surveys-controller'
 import { ListSurvey, SurveyModel } from './list-surveys-controller-protocols'
 import MockDate from 'mockdate'
+import { ok } from '../../../helpers/http/http-helper'
 
 const makeFakeSurveys = (): SurveyModel[] => ([
   {
@@ -52,5 +53,11 @@ describe('ListSurveys Controller', () => {
     const listSpy = jest.spyOn(listSurveyStub, 'list')
     await sut.handle({})
     expect(listSpy).toHaveBeenCalled()
+  })
+
+  test('Should return 200 on succeeds', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(ok(makeFakeSurveys()))
   })
 })
