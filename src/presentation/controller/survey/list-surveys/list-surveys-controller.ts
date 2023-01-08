@@ -1,9 +1,9 @@
 import { internalServerError, noContent, ok } from '../../../helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse, ListSurvey } from './list-surveys-controller-protocols'
+import { Controller, HttpRequest, HttpResponse, ListSurveys } from './list-surveys-controller-protocols'
 
 export class ListSurveyController implements Controller {
   constructor (
-    private readonly listSurvey: ListSurvey
+    private readonly listSurvey: ListSurveys
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {

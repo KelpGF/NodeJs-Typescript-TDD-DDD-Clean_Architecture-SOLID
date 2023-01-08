@@ -1,5 +1,5 @@
 import { ListSurveyController } from './list-surveys-controller'
-import { ListSurvey, SurveyModel } from './list-surveys-controller-protocols'
+import { ListSurveys, SurveyModel } from './list-surveys-controller-protocols'
 import MockDate from 'mockdate'
 import { internalServerError, noContent, ok } from '../../../helpers/http/http-helper'
 
@@ -18,8 +18,8 @@ const makeFakeSurveys = (): SurveyModel[] => ([
   }
 ])
 
-const makeListSurveyStub = (): ListSurvey => {
-  class ListSurveyStub implements ListSurvey {
+const makeListSurveyStub = (): ListSurveys => {
+  class ListSurveyStub implements ListSurveys {
     async list (): Promise<SurveyModel[]> {
       return makeFakeSurveys()
     }
@@ -30,7 +30,7 @@ const makeListSurveyStub = (): ListSurvey => {
 
 interface SutTypes {
   sut: ListSurveyController
-  listSurveyStub: ListSurvey
+  listSurveyStub: ListSurveys
 }
 const makeSut = (): SutTypes => {
   const listSurveyStub = makeListSurveyStub()

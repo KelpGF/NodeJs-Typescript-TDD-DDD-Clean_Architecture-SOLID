@@ -1,5 +1,5 @@
 import { SurveyModel } from '../models/survey'
 
-export interface ListSurvey {
+export interface ListSurveys {
   list: () => Promise<SurveyModel[]>
 }
