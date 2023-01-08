@@ -6,7 +6,7 @@ export class DbListSurveys implements ListSurveys {
   ) {}
 
   async list (): Promise<SurveyModel[]> {
-    await this.findSurveysRepository.findAll()
-    return []
+    const surveys = await this.findSurveysRepository.findAll()
+    return surveys
   }
 }
