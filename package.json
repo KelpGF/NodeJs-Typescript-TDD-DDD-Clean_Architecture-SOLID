@@ -17,8 +17,9 @@
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",
+    "test:verbose": "jest --passWithNoTests --runInBand",
     "test:ci": "npm test -- --coverage",
-    "test:verbose": "jest --passWithNoTests --runInBand"
+    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "@types/supertest": "^2.0.12",
     "@types/validator": "^13.7.10",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "coveralls": "^3.1.1",
     "eslint": "^8.30.0",
     "eslint-config-standard-with-typescript": "^24.0.0",
     "eslint-plugin-import": "^2.26.0",
