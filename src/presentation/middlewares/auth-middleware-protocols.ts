@@ -1,2 +1,2 @@
 export * from '../protocols'
-export * from '../../domain/usecases/find-account-by-token'
+export * from '@/domain/usecases/find-account-by-token'

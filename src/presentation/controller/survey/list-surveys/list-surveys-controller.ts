@@ -1,5 +1,5 @@
-import { internalServerError, noContent, ok } from '../../../helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse, ListSurveys } from './list-surveys-controller-protocols'
+import { internalServerError, noContent, ok } from '@/presentation/helpers/http/http-helper'
 
 export class ListSurveyController implements Controller {
   constructor (

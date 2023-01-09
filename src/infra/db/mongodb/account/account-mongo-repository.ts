@@ -1,8 +1,8 @@
 import { Document } from 'mongodb'
-import { InsertAccountRepository, FindAccountByEmailRepository, UpdateAccessTokenRepository, FindAccountByTokenRepository } from '../../../../data/protocols/db/account'
-import { AccountModel } from '../../../../domain/models/account'
-import { InsertAccountModel } from '../../../../domain/usecases/add-account'
 import { MongoHelper } from '../helpers/mongo-helper'
+import { AccountModel } from '@/domain/models/account'
+import { InsertAccountModel } from '@/domain/usecases/add-account'
+import { InsertAccountRepository, FindAccountByEmailRepository, UpdateAccessTokenRepository, FindAccountByTokenRepository } from '@/data/protocols/db/account'
 
 export type AccountDocument = InsertAccountModel & Document
 

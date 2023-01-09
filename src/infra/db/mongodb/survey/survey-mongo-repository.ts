@@ -1,6 +1,6 @@
-import { InsertSurveyModel, InsertSurveyRepository } from '../../../../data/usescases/add-survey/db-add-survey-protocols'
-import { FindSurveysRepository, SurveyModel } from '../../../../data/usescases/list/db-list-surveys-protocols'
 import { MongoHelper } from '../helpers/mongo-helper'
+import { FindSurveysRepository, SurveyModel } from '@/data/usescases/list/db-list-surveys-protocols'
+import { InsertSurveyModel, InsertSurveyRepository } from '@/data/usescases/add-survey/db-add-survey-protocols'
 
 export class SurveyMongoRepository implements InsertSurveyRepository, FindSurveysRepository {
   async insert (surveyData: InsertSurveyModel): Promise<void> {

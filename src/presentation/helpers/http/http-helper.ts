@@ -1,5 +1,5 @@
-import { InternalServerError, UnauthorizedError } from '../../errors'
-import { HttpResponse } from '../../protocols'
+import { InternalServerError, UnauthorizedError } from '@/presentation/errors'
+import { HttpResponse } from '@/presentation/protocols'
 
 export const ok = (data: any): HttpResponse => ({ statusCode: 200, body: data })
 export const noContent = (): HttpResponse => ({ statusCode: 204, body: null })

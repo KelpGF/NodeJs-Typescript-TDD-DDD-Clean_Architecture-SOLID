@@ -1,8 +1,8 @@
-import { LogErrorRepository } from '../../data/protocols/db/log'
-import { AccountModel } from '../../domain/models/account'
-import { internalServerError, ok } from '../../presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse } from '../../presentation/protocols'
 import { LogControllerDecorator } from './log-controller-decorator'
+import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
+import { internalServerError, ok } from '@/presentation/helpers/http/http-helper'
+import { AccountModel } from '@/domain/models/account'
+import { LogErrorRepository } from '@/data/protocols/db/log'
 
 describe('Log Controller Decorator', () => {
   interface SutTypes {
