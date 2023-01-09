@@ -38,6 +38,7 @@ implements
     }
     const accountCollection = await MongoHelper.getCollection('accounts')
     const account: AccountDocument = await accountCollection.findOne<AccountDocument>(query) as AccountDocument
+    console.log(query, account)
     return account && MongoHelper.map(account)
   }
 }
