@@ -10,6 +10,19 @@ import env from '../config/env'
 let surveyCollection: Collection
 let accountCollection: Collection
 
+const makeFakeAccessToken = async (role?: string): Promise<string> => {
+  const result = await accountCollection.insertOne({
+    name: 'any_name',
+    email: 'any_mail@mail.com',
+    password: 'any_pass',
+    role
+  })
+  const id = result.insertedId
+  const accessToken = sign({ id }, env.jwtSecret)
+  await accountCollection.updateOne({ _id: id }, { $set: { accessToken } })
+  return accessToken
+}
+
 const makeFakeAddSurvey = (): Partial<InsertSurveyModel> => ({
   question: 'Question',
   answers: [
@@ -48,15 +61,7 @@ describe('Survey Routes', () => {
     })
 
     test('Should return 204 on add survey if valid token is provided', async () => {
-      const result = await accountCollection.insertOne({
-        name: 'any_name',
-        email: 'any_mail@mail.com',
-        password: 'any_pass',
-        role: 'admin'
-      })
-      const id = result.insertedId
-      const accessToken = sign({ id }, env.jwtSecret)
-      await accountCollection.updateOne({ _id: id }, { $set: { accessToken } })
+      const accessToken = await makeFakeAccessToken('admin')
       await request(app)
         .post('/api/surveys')
         .set('x-access-token', accessToken)
@@ -70,6 +75,15 @@ describe('Survey Routes', () => {
       await request(app)
         .get('/api/surveys')
         .expect(403)
+    })
+
+    test('Should return 204 on list survey if valid token is provided', async () => {
+      const accessToken = await makeFakeAccessToken()
+
+      await request(app)
+        .get('/api/surveys')
+        .set('x-access-token', accessToken)
+        .expect(204)
     })
   })
 })
