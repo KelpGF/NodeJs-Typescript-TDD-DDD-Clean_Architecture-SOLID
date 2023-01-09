@@ -5,7 +5,7 @@ import { HttpRequest, HttpResponse, Middleware, FindAccountByToken } from './aut
 export class AuthMiddleware implements Middleware {
   constructor (
     private readonly findAccountByToken: FindAccountByToken,
-    private readonly role: string
+    private readonly role: string | undefined
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
