@@ -8,7 +8,7 @@ export class DbSearchSurveyById implements SearchSurveyById {
   ) {}
 
   async searchById (id: string): Promise<SurveyModel | null> {
-    await this.findSurveyByIdRepository.findById(id)
-    return null
+    const survey = await this.findSurveyByIdRepository.findById(id)
+    return survey
   }
 }
