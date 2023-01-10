@@ -26,7 +26,7 @@ const makeFindAccountByTokenRepositoryStub = (): FindAccountByTokenRepository =>
   return new FindAccountByTokenRepositoryStub()
 }
 
-interface SutTypes {
+type SutTypes = {
   sut: DbFindAccountByToken
   decrypterStub: Decrypter
   findAccountByTokenRepositoryStub: FindAccountByTokenRepository

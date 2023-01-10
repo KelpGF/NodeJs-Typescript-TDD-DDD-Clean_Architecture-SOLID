@@ -5,7 +5,7 @@ import { AccountModel } from '@/domain/models/account'
 import { LogErrorRepository } from '@/data/protocols/db/log'
 
 describe('Log Controller Decorator', () => {
-  interface SutTypes {
+  type SutTypes = {
     sut: Controller
     stubController: Controller
     stubLogErrorRepository: LogErrorRepository

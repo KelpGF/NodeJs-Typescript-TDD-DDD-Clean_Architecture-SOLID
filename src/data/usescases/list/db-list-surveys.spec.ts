@@ -27,7 +27,7 @@ const makeFindSurveysRepositoryStub = (): FindSurveysRepository => {
   return new FindSurveysRepositoryStub()
 }
 
-interface SutTypes {
+type SutTypes = {
   sut: DbListSurveys
   findSurveysRepositoryStub: FindSurveysRepository
 }
