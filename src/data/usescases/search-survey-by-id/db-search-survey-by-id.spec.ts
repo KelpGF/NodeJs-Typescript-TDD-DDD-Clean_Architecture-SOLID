@@ -53,4 +53,11 @@ describe('DbSearchSurveyById', () => {
     const survey = await sut.searchById('any_id')
     expect(survey).toEqual(makeFakeSurvey())
   })
+
+  test('Should throw if FindSurveyByIdRepository throws', async () => {
+    const { sut, findSurveyByIdRepositoryStub } = makeSut()
+    jest.spyOn(findSurveyByIdRepositoryStub, 'findById').mockRejectedValueOnce(new Error(''))
+    const promise = sut.searchById('any_id')
+    await expect(promise).rejects.toThrow()
+  })
 })
