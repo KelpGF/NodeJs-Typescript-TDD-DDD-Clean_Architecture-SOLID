@@ -1,7 +1,6 @@
 import MockDate from 'mockdate'
 import { DbSearchSurveyById } from './db-search-survey-by-id'
-import { SurveyModel } from '@/domain/models/survey'
-import { FindSurveyByIdRepository } from '@/data/protocols/db/survey/find-survey-by-id-repository'
+import { SurveyModel, FindSurveyByIdRepository } from './db-search-survey-by-id-protocols'
 
 const makeFakeSurvey = (): SurveyModel => ({
   id: 'any_id',

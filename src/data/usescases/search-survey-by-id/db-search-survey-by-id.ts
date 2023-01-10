@@ -1,6 +1,4 @@
-import { SurveyModel } from '../list/db-list-surveys-protocols'
-import { SearchSurveyById } from '@/domain/usecases/search-survey-by-id'
-import { FindSurveyByIdRepository } from '@/data/protocols/db/survey/find-survey-by-id-repository'
+import { SurveyModel, SearchSurveyById, FindSurveyByIdRepository } from './db-search-survey-by-id-protocols'
 
 export class DbSearchSurveyById implements SearchSurveyById {
   constructor (
