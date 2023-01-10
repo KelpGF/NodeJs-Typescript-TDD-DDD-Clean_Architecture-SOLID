@@ -47,4 +47,10 @@ describe('DbSearchSurveyById', () => {
     await sut.searchById('any_id')
     expect(findByIdSpy).toHaveBeenCalledWith('any_id')
   })
+
+  test('Should return a survey on success', async () => {
+    const { sut } = makeSut()
+    const survey = await sut.searchById('any_id')
+    expect(survey).toEqual(makeFakeSurvey())
+  })
 })
