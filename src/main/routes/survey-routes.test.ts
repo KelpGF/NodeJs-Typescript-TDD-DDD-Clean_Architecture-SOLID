@@ -23,7 +23,7 @@ const makeFakeAccessToken = async (role?: string): Promise<string> => {
   return accessToken
 }
 
-const makeFakeAddSurvey = (): Partial<InsertSurveyModel> => ({
+const makeFakeAddSurvey = (): Omit<InsertSurveyModel, 'date'> => ({
   question: 'Question',
   answers: [
     {

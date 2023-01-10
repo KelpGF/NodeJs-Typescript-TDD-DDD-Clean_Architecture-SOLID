@@ -2,14 +2,14 @@ import { Collection } from 'mongodb'
 import { AccountMongoRepository } from './account-mongo-repository'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountModel } from '@/domain/models/account'
-import { InsertAccountModel } from '@/domain/usecases/add-account'
+import { AddAccountModel } from '@/domain/usecases/add-account'
 
 let accountCollection: Collection
 
 const makeSut = (): AccountMongoRepository => {
   return new AccountMongoRepository()
 }
-const makeFakeAddAccountModel = (): InsertAccountModel => ({
+const makeFakeAddAccountModel = (): AddAccountModel => ({
   name: 'any_name',
   email: 'any_email',
   password: 'any_password'
