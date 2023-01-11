@@ -1,4 +1,4 @@
-import { Document } from 'mongodb'
+import { Document, ObjectId } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountModel } from '@/domain/models/account'
 import { AddAccountModel } from '@/domain/usecases/add-account'
@@ -28,7 +28,7 @@ implements
 
   async updateAccessToken (id: string, accessToken: string): Promise<void> {
     const accountCollection = await MongoHelper.getCollection('accounts')
-    await accountCollection.updateOne({ _id: id }, { $set: { accessToken } })
+    await accountCollection.updateOne({ _id: new ObjectId(id) }, { $set: { accessToken } })
   }
 
   async findByToken (token: string, role?: string): Promise<AccountModel | null> {
