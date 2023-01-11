@@ -10,6 +10,6 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
       { $set: { answer, date } },
       { upsert: true, returnDocument: 'after' }
     )
-    return MongoHelper.map(surveyResultData)
+    return Object.assign({}, MongoHelper.map(surveyResultData), { accountId, surveyId })
   }
 }
