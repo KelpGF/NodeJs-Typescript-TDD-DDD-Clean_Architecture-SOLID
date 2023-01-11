@@ -53,11 +53,20 @@ describe('Survey MongoRepository', () => {
       expect(surveys[0].question).toBe('any_question')
       expect(surveys[1].question).toBe('other_question')
     })
+
+    test('Should find empty list', async () => {
+      const sut = makeSut()
+      const surveys = await sut.findAll()
+      expect(surveys.length).toBe(0)
+    })
   })
 
-  test('Should find empty list', async () => {
-    const sut = makeSut()
-    const surveys = await sut.findAll()
-    expect(surveys.length).toBe(0)
+  describe('findById()', () => {
+    test('Should findById on success', async () => {
+      const { insertedId } = await surveyCollection.insertOne(makeSurveyData())
+      const sut = makeSut()
+      const survey = await sut.findById(insertedId.toString())
+      expect(survey).toBeTruthy()
+    })
   })
 })
