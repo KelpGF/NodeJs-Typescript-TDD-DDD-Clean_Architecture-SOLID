@@ -11,15 +11,14 @@ let surveyCollection: Collection
 let accountCollection: Collection
 
 const makeFakeAccessToken = async (role?: string): Promise<string> => {
-  const result = await accountCollection.insertOne({
+  const { insertedId } = await accountCollection.insertOne({
     name: 'any_name',
     email: 'any_mail@mail.com',
     password: 'any_pass',
     role
   })
-  const id = result.insertedId
-  const accessToken = sign({ id }, env.jwtSecret)
-  await accountCollection.updateOne({ _id: id }, { $set: { accessToken } })
+  const accessToken = sign({ id: insertedId }, env.jwtSecret)
+  await accountCollection.updateOne({ _id: insertedId }, { $set: { accessToken } })
   return accessToken
 }
 
