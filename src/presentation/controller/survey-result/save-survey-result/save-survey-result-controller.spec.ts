@@ -2,6 +2,7 @@ import {
   forbidden,
   HttpRequest,
   internalServerError,
+  ok,
   SaveSurveyResult,
   SaveSurveyResultModel,
   SearchSurveyById,
@@ -124,5 +125,11 @@ describe('SaveSurveyResultController', () => {
     jest.spyOn(saveSurveyResultStub, 'save').mockRejectedValueOnce(new Error())
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(internalServerError(new Error()))
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok(makeFakeSurveyResult()))
   })
 })
