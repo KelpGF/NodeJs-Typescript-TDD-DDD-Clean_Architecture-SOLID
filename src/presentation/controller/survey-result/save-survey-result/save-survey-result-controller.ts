@@ -9,8 +9,8 @@ export class SaveSurveyResultController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { surveyId } = httpRequest.params || {}
-      const { answer } = httpRequest.body || {}
+      const { surveyId } = httpRequest.params
+      const { answer } = httpRequest.body
 
       const survey = await this.searchSurveyById.searchById(surveyId)
       if (!survey) return forbidden(new InvalidParamError('surveyId'))
