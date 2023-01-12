@@ -8,8 +8,15 @@ export class SaveSurveyResultController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const survey = await this.searchSurveyById.searchById(httpRequest.params?.surveyId)
+      const { surveyId } = httpRequest.params || {}
+      const { answer } = httpRequest.body || {}
+
+      const survey = await this.searchSurveyById.searchById(surveyId)
       if (!survey) return forbidden(new InvalidParamError('surveyId'))
+
+      const surveyAnswer = survey.answers.find((surveyAnswer) => surveyAnswer === answer)
+      if (!surveyAnswer) return forbidden(new InvalidParamError('answer'))
+
       return ok({})
     } catch (error) {
       return internalServerError(error)
