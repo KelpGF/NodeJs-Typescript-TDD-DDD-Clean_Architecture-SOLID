@@ -1,7 +1,7 @@
 import { MongoHelper } from '../helpers/mongo-helper'
-import { FindSurveysRepository, SurveyModel } from '@/data/usescases/list/db-list-surveys-protocols'
-import { InsertSurveyModel, InsertSurveyRepository } from '@/data/usescases/add-survey/db-add-survey-protocols'
-import { FindSurveyByIdRepository } from '@/data/usescases/search-survey-by-id/db-search-survey-by-id-protocols'
+import { SurveyModel } from '@/domain/models/survey'
+import { InsertSurveyModel } from '@/domain/usecases/survey/add-survey'
+import { FindSurveyByIdRepository, InsertSurveyRepository, FindSurveysRepository } from '@/data/protocols/db/survey'
 import { ObjectId } from 'mongodb'
 
 export class SurveyMongoRepository implements InsertSurveyRepository, FindSurveysRepository, FindSurveyByIdRepository {

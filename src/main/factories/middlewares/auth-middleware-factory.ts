@@ -1,4 +1,4 @@
-import { makeDbSearchAccountByToken } from '../usecases/account/search-account-by-token/db-search-account-by-token-factory'
+import { makeDbSearchAccountByToken } from '@/main/factories/usecases/account/search-account-by-token/db-search-account-by-token-factory'
 import { Middleware } from '@/presentation/protocols'
 import { AuthMiddleware } from '@/presentation/middlewares/auth-middleware'
 

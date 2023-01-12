@@ -1,6 +1,6 @@
 import env from '@/main/config/env'
-import { DbSearchAccountByToken } from '@/data/usescases/search-account-by-token/db-search-account-by-token'
-import { SearchAccountByToken } from '@/domain/usecases/search-account-by-token'
+import { DbSearchAccountByToken } from '@/data/usescases/account/search-account-by-token/db-search-account-by-token'
+import { SearchAccountByToken } from '@/domain/usecases/account/search-account-by-token'
 import { JwtAdapter } from '@/infra/cryptography/jwt-adapter/jwt-adapter'
 import { AccountMongoRepository } from '@/infra/db/mongodb/account/account-mongo-repository'
 
