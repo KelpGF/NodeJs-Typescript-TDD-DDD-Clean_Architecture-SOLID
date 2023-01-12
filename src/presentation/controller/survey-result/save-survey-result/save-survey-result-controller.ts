@@ -18,14 +18,14 @@ export class SaveSurveyResultController implements Controller {
       const surveyAnswer = survey.answers.find((surveyAnswer) => surveyAnswer.answer === answer)
       if (!surveyAnswer) return forbidden(new InvalidParamError('answer'))
 
-      await this.saveSurveyResult.save({
+      const surveyResult = await this.saveSurveyResult.save({
         surveyId: survey.id,
         accountId: String(httpRequest.accountId),
         answer: surveyAnswer.answer,
         date: new Date()
       })
 
-      return ok({})
+      return ok(surveyResult)
     } catch (error) {
       return internalServerError(error)
     }
