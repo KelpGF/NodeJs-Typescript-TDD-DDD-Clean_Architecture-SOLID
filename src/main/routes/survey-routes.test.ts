@@ -4,7 +4,7 @@ import { Collection } from 'mongodb'
 import { sign } from 'jsonwebtoken'
 import app from '../config/app'
 import env from '../config/env'
-import { InsertSurveyParams } from '@/domain/usecases/survey/add-survey'
+import { AddSurveyParams } from '@/domain/usecases/survey/add-survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 
 let surveyCollection: Collection
@@ -22,7 +22,7 @@ const makeFakeAccessToken = async (role?: string): Promise<string> => {
   return accessToken
 }
 
-const makeFakeAddSurvey = (): Omit<InsertSurveyParams, 'date'> => ({
+const makeFakeAddSurvey = (): Omit<AddSurveyParams, 'date'> => ({
   question: 'Question',
   answers: [
     {

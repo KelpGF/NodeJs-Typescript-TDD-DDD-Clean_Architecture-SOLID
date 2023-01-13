@@ -1,24 +1,11 @@
 import { Collection } from 'mongodb'
 import { SurveyMongoRepository } from './survey-mongo-repository'
 import { MongoHelper } from '../helpers/mongo-helper'
-import { InsertSurveyParams } from '@/domain/usecases/survey/add-survey'
+import { mockAddSurveyParams } from '@/domain/test'
 
 let surveyCollection: Collection
 
 const makeSut = (): SurveyMongoRepository => new SurveyMongoRepository()
-const makeSurveyData = (): InsertSurveyParams => ({
-  question: 'any_question',
-  answers: [
-    {
-      answer: 'any_answer',
-      image: 'any_image'
-    },
-    {
-      answer: 'other_any_answer'
-    }
-  ],
-  date: new Date()
-})
 
 describe('Survey MongoRepository', () => {
   beforeAll(async () => {
@@ -35,7 +22,7 @@ describe('Survey MongoRepository', () => {
   describe('add()', () => {
     test('Should insert a survey on insert success', async () => {
       const sut = makeSut()
-      await sut.insert(makeSurveyData())
+      await sut.insert(mockAddSurveyParams())
       const survey = await surveyCollection.findOne({ question: 'any_question' })
       expect(survey).toBeTruthy()
     })
@@ -44,8 +31,8 @@ describe('Survey MongoRepository', () => {
   describe('findAll()', () => {
     test('Should find all on success', async () => {
       await surveyCollection.insertMany([
-        makeSurveyData(),
-        { ...makeSurveyData(), question: 'other_question' }
+        mockAddSurveyParams(),
+        { ...mockAddSurveyParams(), question: 'other_question' }
       ])
       const sut = makeSut()
       const surveys = await sut.findAll()
@@ -64,7 +51,7 @@ describe('Survey MongoRepository', () => {
 
   describe('findById()', () => {
     test('Should findById on success', async () => {
-      const { insertedId } = await surveyCollection.insertOne(makeSurveyData())
+      const { insertedId } = await surveyCollection.insertOne(mockAddSurveyParams())
       const sut = makeSut()
       const survey = await sut.findById(insertedId.toString())
       expect(survey).toBeTruthy()

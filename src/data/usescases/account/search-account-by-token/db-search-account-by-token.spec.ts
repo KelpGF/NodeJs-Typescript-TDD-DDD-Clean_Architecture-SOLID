@@ -1,30 +1,7 @@
+import { mockAccountModel } from '@/domain/test'
+import { mockDecrypter, mockFindAccountByTokenRepository } from '@/data/test'
 import { DbSearchAccountByToken } from './db-search-account-by-token'
-import { AccountModel, Decrypter, FindAccountByTokenRepository } from './db-search-account-by-token-protocols'
-
-const makeFakeAccount = (): AccountModel => ({
-  id: 'any_id',
-  email: 'any_email@mail.com',
-  name: 'any_name',
-  password: 'hashed_pass'
-})
-const makeDecrypterStub = (): Decrypter => {
-  class DecrypterStub implements Decrypter {
-    async decrypt (token: string): Promise<string | null> {
-      return 'any_value'
-    }
-  }
-
-  return new DecrypterStub()
-}
-const makeFindAccountByTokenRepositoryStub = (): FindAccountByTokenRepository => {
-  class FindAccountByTokenRepositoryStub implements FindAccountByTokenRepository {
-    async findByToken (token: string): Promise<AccountModel | null> {
-      return makeFakeAccount()
-    }
-  }
-
-  return new FindAccountByTokenRepositoryStub()
-}
+import { Decrypter, FindAccountByTokenRepository } from './db-search-account-by-token-protocols'
 
 type SutTypes = {
   sut: DbSearchAccountByToken
@@ -32,8 +9,8 @@ type SutTypes = {
   findAccountByTokenRepositoryStub: FindAccountByTokenRepository
 }
 const makeSut = (): SutTypes => {
-  const decrypterStub = makeDecrypterStub()
-  const findAccountByTokenRepositoryStub = makeFindAccountByTokenRepositoryStub()
+  const decrypterStub = mockDecrypter()
+  const findAccountByTokenRepositoryStub = mockFindAccountByTokenRepository()
   const sut = new DbSearchAccountByToken(decrypterStub, findAccountByTokenRepositoryStub)
 
   return { sut, decrypterStub, findAccountByTokenRepositoryStub }
@@ -79,7 +56,7 @@ describe('DbSearchAccountByToken UseCase', () => {
   test('Should an account on succeeds', async () => {
     const { sut } = makeSut()
     const account = await sut.search('any_token')
-    expect(account).toEqual(makeFakeAccount())
+    expect(account).toEqual(mockAccountModel())
   })
 
   test('Should throw if FindAccountByTokenRepository throws', async () => {

@@ -2,18 +2,13 @@ import { Collection, ObjectId } from 'mongodb'
 import { AccountMongoRepository } from './account-mongo-repository'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountModel } from '@/domain/models/account'
-import { AddAccountParams } from '@/domain/usecases/account/add-account'
+import { mockAddAccountParams, mockAddAccountParamsWithToken, mockAddAccountParamsWithTokenAndRole } from '@/domain/test'
 
 let accountCollection: Collection
 
 const makeSut = (): AccountMongoRepository => {
   return new AccountMongoRepository()
 }
-const makeFakeAddAccountParams = (): AddAccountParams => ({
-  name: 'any_name',
-  email: 'any_email',
-  password: 'any_password'
-})
 
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
@@ -32,7 +27,7 @@ describe('Account Mongo Repository', () => {
   describe('insert()', () => {
     test('Should return an account on insert success', async () => {
       const sut = makeSut()
-      const fakeAddAccountParams = makeFakeAddAccountParams()
+      const fakeAddAccountParams = mockAddAccountParams()
       const account = await sut.insert(fakeAddAccountParams)
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
@@ -44,7 +39,7 @@ describe('Account Mongo Repository', () => {
 
   describe('findByEmail()', () => {
     test('Should return an account on find by email success', async () => {
-      const fakeAddAccountParams = makeFakeAddAccountParams()
+      const fakeAddAccountParams = mockAddAccountParams()
       await accountCollection.insertOne(fakeAddAccountParams)
       const sut = makeSut()
       const account = await sut.findByEmail(fakeAddAccountParams.email) as AccountModel
@@ -65,7 +60,7 @@ describe('Account Mongo Repository', () => {
   describe('updateAccessToken()', () => {
     test('Should update the account accessToken on updateAccessToken success', async () => {
       const sut = makeSut()
-      const fakeAccount = await sut.insert(makeFakeAddAccountParams())
+      const fakeAccount = await sut.insert(mockAddAccountParams())
       expect(fakeAccount?.accessToken).toBeFalsy()
       await sut.updateAccessToken(fakeAccount.id, 'any_token')
       const updatedAccount = await accountCollection.findOne({ _id: new ObjectId(fakeAccount.id) })
@@ -76,8 +71,8 @@ describe('Account Mongo Repository', () => {
 
   describe('findByToken()', () => {
     test('Should return an account on findByToken without role', async () => {
-      const fakeAddAccountParams = makeFakeAddAccountParams()
-      await accountCollection.insertOne({ ...fakeAddAccountParams, accessToken: 'any_token' })
+      const fakeAddAccountParams = mockAddAccountParamsWithToken()
+      await accountCollection.insertOne(fakeAddAccountParams)
       const sut = makeSut()
       const account = await sut.findByToken('any_token') as AccountModel
       expect(account).toBeTruthy()
@@ -88,8 +83,8 @@ describe('Account Mongo Repository', () => {
     })
 
     test('Should return an account on findByToken with admin role', async () => {
-      const fakeAddAccountParams = makeFakeAddAccountParams()
-      await accountCollection.insertOne({ ...fakeAddAccountParams, accessToken: 'any_token', role: 'admin' })
+      const fakeAddAccountParams = mockAddAccountParamsWithTokenAndRole('admin')
+      await accountCollection.insertOne(fakeAddAccountParams)
       const sut = makeSut()
       const account = await sut.findByToken('any_token', 'admin') as AccountModel
       expect(account).toBeTruthy()
@@ -100,16 +95,15 @@ describe('Account Mongo Repository', () => {
     })
 
     test('Should return null on findByToken with invalid role', async () => {
-      const fakeAddAccountParams = makeFakeAddAccountParams()
-      await accountCollection.insertOne({ ...fakeAddAccountParams, accessToken: 'any_token' })
+      await accountCollection.insertOne(mockAddAccountParamsWithToken())
       const sut = makeSut()
       const account = await sut.findByToken('any_token', 'admin') as AccountModel
       expect(account).toBeFalsy()
     })
 
     test('Should return an account on findByToken if user is admin', async () => {
-      const fakeAddAccountParams = makeFakeAddAccountParams()
-      await accountCollection.insertOne({ ...fakeAddAccountParams, accessToken: 'any_token', role: 'admin' })
+      const fakeAddAccountParams = mockAddAccountParamsWithTokenAndRole('admin')
+      await accountCollection.insertOne(fakeAddAccountParams)
       const sut = makeSut()
       const account = await sut.findByToken('any_token') as AccountModel
       expect(account).toBeTruthy()

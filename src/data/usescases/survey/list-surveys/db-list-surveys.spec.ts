@@ -1,31 +1,8 @@
-import { FindSurveysRepository, SurveyModel } from './db-list-surveys-protocols'
+import { FindSurveysRepository } from './db-list-surveys-protocols'
 import { DbListSurveys } from './db-list-surveys'
 import MockDate from 'mockdate'
-
-const makeFakeSurveys = (): SurveyModel[] => ([
-  {
-    id: 'any_id',
-    question: 'any_question',
-    answers: [{ answer: 'any_answer', image: 'any_image' }],
-    date: new Date()
-  },
-  {
-    id: 'other_id',
-    question: 'other_question',
-    answers: [{ answer: 'other_answer' }],
-    date: new Date()
-  }
-])
-
-const makeFindSurveysRepositoryStub = (): FindSurveysRepository => {
-  class FindSurveysRepositoryStub implements FindSurveysRepository {
-    async findAll (): Promise<SurveyModel[]> {
-      return makeFakeSurveys()
-    }
-  }
-
-  return new FindSurveysRepositoryStub()
-}
+import { mockFindSurveysRepository } from '@/data/test'
+import { mockSurveyModelList } from '@/domain/test'
 
 type SutTypes = {
   sut: DbListSurveys
@@ -33,7 +10,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const findSurveysRepositoryStub = makeFindSurveysRepositoryStub()
+  const findSurveysRepositoryStub = mockFindSurveysRepository()
   const sut = new DbListSurveys(findSurveysRepositoryStub)
 
   return { sut, findSurveysRepositoryStub }
@@ -58,7 +35,7 @@ describe('DbListSurveys UseCase', () => {
   test('Should return a list of Surveys on succeeds', async () => {
     const { sut } = makeSut()
     const surveys = await sut.list()
-    expect(surveys).toEqual(makeFakeSurveys())
+    expect(surveys).toEqual(mockSurveyModelList())
   })
 
   test('Should throw if FindSurveysRepository throws', async () => {

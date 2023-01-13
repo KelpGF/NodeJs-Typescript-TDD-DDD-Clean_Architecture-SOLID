@@ -1,39 +1,16 @@
 import MockDate from 'mockdate'
 import { ListSurveyController } from './list-surveys-controller'
-import { ListSurveys, SurveyModel } from './list-surveys-controller-protocols'
+import { ListSurveys } from './list-surveys-controller-protocols'
 import { internalServerError, noContent, ok } from '@/presentation/helpers/http/http-helper'
-
-const makeFakeSurveys = (): SurveyModel[] => ([
-  {
-    id: 'any_id',
-    question: 'any_question',
-    answers: [{ answer: 'any_answer', image: 'any_image' }],
-    date: new Date()
-  },
-  {
-    id: 'other_id',
-    question: 'other_question',
-    answers: [{ answer: 'other_answer' }],
-    date: new Date()
-  }
-])
-
-const makeListSurveyStub = (): ListSurveys => {
-  class ListSurveyStub implements ListSurveys {
-    async list (): Promise<SurveyModel[]> {
-      return makeFakeSurveys()
-    }
-  }
-
-  return new ListSurveyStub()
-}
+import { mockSurveyModelList } from '@/domain/test'
+import { mockListSurveys } from '@/presentation/test'
 
 type SutTypes = {
   sut: ListSurveyController
   listSurveyStub: ListSurveys
 }
 const makeSut = (): SutTypes => {
-  const listSurveyStub = makeListSurveyStub()
+  const listSurveyStub = mockListSurveys()
   const sut = new ListSurveyController(listSurveyStub)
 
   return { sut, listSurveyStub }
@@ -58,7 +35,7 @@ describe('ListSurveys Controller', () => {
   test('Should return 200 on succeeds', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle({})
-    expect(httpResponse).toEqual(ok(makeFakeSurveys()))
+    expect(httpResponse).toEqual(ok(mockSurveyModelList()))
   })
 
   test('Should return 204 on if ListSurveys returns empty', async () => {
