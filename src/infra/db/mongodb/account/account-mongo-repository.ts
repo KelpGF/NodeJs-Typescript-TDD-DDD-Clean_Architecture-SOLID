@@ -1,10 +1,10 @@
 import { Document, ObjectId } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountModel } from '@/domain/models/account'
-import { AddAccountModel } from '@/domain/usecases/account/add-account'
+import { AddAccountParams } from '@/domain/usecases/account/add-account'
 import { InsertAccountRepository, FindAccountByEmailRepository, UpdateAccessTokenRepository, FindAccountByTokenRepository } from '@/data/protocols/db/account'
 
-export type AccountDocument = AddAccountModel & Document
+export type AccountDocument = AddAccountParams & Document
 
 export class AccountMongoRepository
 implements
@@ -12,7 +12,7 @@ implements
   FindAccountByEmailRepository,
   UpdateAccessTokenRepository,
   FindAccountByTokenRepository {
-  async insert (accountData: AddAccountModel): Promise<AccountModel> {
+  async insert (accountData: AddAccountParams): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection('accounts')
     const { insertedId } = await accountCollection.insertOne(accountData)
     const account: AccountDocument = await accountCollection.findOne<AccountDocument>({ _id: insertedId }) as AccountDocument

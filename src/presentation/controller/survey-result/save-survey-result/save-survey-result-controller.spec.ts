@@ -4,7 +4,7 @@ import {
   internalServerError,
   ok,
   SaveSurveyResult,
-  SaveSurveyResultModel,
+  SaveSurveyResultParams,
   SearchSurveyById,
   SurveyModel,
   SurveyResultModel
@@ -48,7 +48,7 @@ const makeSearchSurveyByIdStub = (): SearchSurveyById => {
 
 const makeSaveSurveyResultStub = (): SaveSurveyResult => {
   class SaveSurveyResultStub implements SaveSurveyResult {
-    async save (data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+    async save (data: SaveSurveyResultParams): Promise<SurveyResultModel> {
       return makeFakeSurveyResult()
     }
   }

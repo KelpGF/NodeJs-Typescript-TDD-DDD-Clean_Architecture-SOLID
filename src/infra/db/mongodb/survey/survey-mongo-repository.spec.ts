@@ -1,12 +1,12 @@
 import { Collection } from 'mongodb'
 import { SurveyMongoRepository } from './survey-mongo-repository'
 import { MongoHelper } from '../helpers/mongo-helper'
-import { InsertSurveyModel } from '@/domain/usecases/survey/add-survey'
+import { InsertSurveyParams } from '@/domain/usecases/survey/add-survey'
 
 let surveyCollection: Collection
 
 const makeSut = (): SurveyMongoRepository => new SurveyMongoRepository()
-const makeSurveyData = (): InsertSurveyModel => ({
+const makeSurveyData = (): InsertSurveyParams => ({
   question: 'any_question',
   answers: [
     {

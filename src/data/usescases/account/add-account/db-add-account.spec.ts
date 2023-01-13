@@ -1,4 +1,4 @@
-import { AccountModel, AddAccount, AddAccountModel, InsertAccountRepository, Hasher, FindAccountByEmailRepository } from './db-add-account-protocols'
+import { AccountModel, AddAccount, AddAccountParams, InsertAccountRepository, Hasher, FindAccountByEmailRepository } from './db-add-account-protocols'
 import { DBAddAccount } from './db-add-account'
 
 const makeHasher = (): Hasher => {
@@ -14,7 +14,7 @@ const makeHasher = (): Hasher => {
 }
 const makeAddAccountRepository = (): InsertAccountRepository => {
   class InsertAccountRepositoryStub implements InsertAccountRepository {
-    async insert (account: AddAccountModel): Promise<AccountModel> {
+    async insert (account: AddAccountParams): Promise<AccountModel> {
       return await Promise.resolve(makeFakeAccount())
     }
   }
@@ -38,7 +38,7 @@ const makeFakeAccount = (): AccountModel => ({
   email: 'valid_email@mail.com',
   password: 'valid_pass'
 })
-const makeFakeAddAccountData = (): AddAccountModel => ({
+const makeFakeAddAccountData = (): AddAccountParams => ({
   email: 'valid_email@gmail.com',
   name: 'valid_name',
   password: 'valid_password'

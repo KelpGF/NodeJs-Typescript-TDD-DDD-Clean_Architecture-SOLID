@@ -1,4 +1,4 @@
-import { SaveSurveyResultModel } from '@/domain/usecases/survey-result/save-survey-result'
+import { SaveSurveyResultParams } from '@/domain/usecases/survey-result/save-survey-result'
 import { Collection, ObjectId } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
@@ -23,7 +23,7 @@ const makeFakeAccountId = async (): Promise<string> => {
   })
   return insertedId.toString()
 }
-const makeFakeSaveSurveyResultData = async (): Promise<SaveSurveyResultModel> => ({
+const makeFakeSaveSurveyResultData = async (): Promise<SaveSurveyResultParams> => ({
   surveyId: await makeFakeSurveyId(),
   accountId: await makeFakeAccountId(),
   answer: 'any_answer',
