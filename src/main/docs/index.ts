@@ -11,6 +11,7 @@ import {
   errorSchema,
   loginParamsSchema,
   signUpParamsSchema,
+  addSurveyParamsSchema,
   surveyAnswerSchema,
   surveyListSchema,
   surveySchema
@@ -46,6 +47,7 @@ export default {
     loginParams: loginParamsSchema,
     signUpParams: signUpParamsSchema,
     account: accountSchema,
+    addSurveyParams: addSurveyParamsSchema,
     survey: surveySchema,
     surveyAnswer: surveyAnswerSchema,
     surveyList: surveyListSchema
