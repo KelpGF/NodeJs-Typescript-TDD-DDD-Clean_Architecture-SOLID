@@ -8,7 +8,8 @@ import {
   surveyListSchema,
   surveySchema,
   surveyResultSchema,
-  saveSurveyResultParamsSchema
+  saveSurveyResultParamsSchema,
+  surveyResultAnswerSchema
 } from './schemas/'
 
 export default {
@@ -21,5 +22,6 @@ export default {
   surveyAnswer: surveyAnswerSchema,
   surveyList: surveyListSchema,
   surveyResult: surveyResultSchema,
+  surveyResultAnswer: surveyResultAnswerSchema,
   saveSurveyResultParams: saveSurveyResultParamsSchema
 }
