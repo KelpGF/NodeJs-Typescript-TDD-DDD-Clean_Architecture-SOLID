@@ -118,5 +118,11 @@ describe('SurveyResult MongoRepository', () => {
       expect(surveyResult.answers[1].percent).toBe(25)
       expect(surveyResult.answers[1].answer).toBe('other_answer')
     })
+
+    test('Should return null if invalid surveyId is provided', async () => {
+      const sut = makeSut()
+      const surveyResult = await sut.findBySurveyId(new ObjectId().toString())
+      expect(surveyResult).toBeNull()
+    })
   })
 })
