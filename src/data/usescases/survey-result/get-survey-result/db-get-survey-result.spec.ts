@@ -29,4 +29,11 @@ describe('DbGetSurveyResult UseCase', () => {
     await sut.get('any_survey_id')
     expect(findBySurveyIdSpy).toHaveBeenCalledWith('any_survey_id')
   })
+
+  test('Should throw if FindSurveyResultBySurveyIdRepository throws', async () => {
+    const { sut, findSurveyResultBySurveyIdRepositoryStub } = makeSut()
+    jest.spyOn(findSurveyResultBySurveyIdRepositoryStub, 'findBySurveyId').mockRejectedValueOnce(new Error())
+    const promise = sut.get('any_survey_id')
+    await expect(promise).rejects.toThrow()
+  })
 })
