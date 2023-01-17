@@ -6,8 +6,7 @@ export class DbGetSurveyResult implements GetSurveyResult {
   ) {}
 
   async get (surveyId: string): Promise<SurveyResultModel> {
-    const result = await this.findSurveyResultBySurveyIdRepository.findBySurveyId(surveyId)
-
-    return result
+    const surveyResult = await this.findSurveyResultBySurveyIdRepository.findBySurveyId(surveyId)
+    return surveyResult
   }
 }
