@@ -1,3 +1,4 @@
+import { SurveyResultModel } from '@/domain/models/survey-result'
 import { mockAddAccountParams, mockAddSurveyParams } from '@/domain/test'
 import { SaveSurveyResultParams } from '@/domain/usecases/survey-result/save-survey-result'
 import { Collection, ObjectId } from 'mongodb'
@@ -73,6 +74,49 @@ describe('SurveyResult MongoRepository', () => {
       expect(surveyResult.answers[1].count).toBe(0)
       expect(surveyResult.answers[1].percent).toBe(0)
       expect(surveyResult.answers[1].answer).toBe('any_answer')
+    })
+  })
+
+  describe('findBySurveyId()', () => {
+    test('Should return a surveyResult if valid surveyId is provided', async () => {
+      const sut = makeSut()
+      const accountId = await mockAccountModelId()
+      const surveyId = await mockSurveyId()
+      await surveyResultCollection.insertMany([
+        {
+          accountId: new ObjectId(accountId),
+          surveyId: new ObjectId(surveyId),
+          date: new Date(),
+          answer: 'any_answer'
+        },
+        {
+          accountId: new ObjectId(accountId),
+          surveyId: new ObjectId(surveyId),
+          date: new Date(),
+          answer: 'any_answer'
+        },
+        {
+          accountId: new ObjectId(accountId),
+          surveyId: new ObjectId(surveyId),
+          date: new Date(),
+          answer: 'any_answer'
+        },
+        {
+          accountId: new ObjectId(accountId),
+          surveyId: new ObjectId(surveyId),
+          date: new Date(),
+          answer: 'other_answer'
+        }
+      ])
+
+      const surveyResult: SurveyResultModel = (await sut.findBySurveyId(surveyId)) as SurveyResultModel
+      expect(surveyResult).toBeTruthy()
+      expect(surveyResult.answers[0].count).toBe(3)
+      expect(surveyResult.answers[0].percent).toBe(75)
+      expect(surveyResult.answers[0].answer).toBe('any_answer')
+      expect(surveyResult.answers[1].count).toBe(1)
+      expect(surveyResult.answers[1].percent).toBe(25)
+      expect(surveyResult.answers[1].answer).toBe('other_answer')
     })
   })
 })
