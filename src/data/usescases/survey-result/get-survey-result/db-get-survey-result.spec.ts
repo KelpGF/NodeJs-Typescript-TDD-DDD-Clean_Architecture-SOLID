@@ -1,6 +1,6 @@
 import { DbGetSurveyResult } from './db-get-survey-result'
 import { FindSurveyResultBySurveyIdRepository, FindSurveyByIdRepository } from './db-get-survey-result-protocols'
-import { mockSurveyResultModel } from '@/domain/test'
+import { mockEmptySurveyResultModel, mockSurveyResultModel } from '@/domain/test'
 import { mockFindSurveyByIdRepository, mockFindSurveyResultBySurveyIdRepository } from '@/data/test'
 import MockDate from 'mockdate'
 
@@ -46,6 +46,13 @@ describe('DbGetSurveyResult UseCase', () => {
     const findByIdSpy = jest.spyOn(findSurveyByIdRepositoryStub, 'findById')
     await sut.get('any_survey_id')
     expect(findByIdSpy).toBeCalledWith('any_survey_id')
+  })
+
+  test('Should call FindSurveyByIdRepository with all counts 0 if FindSurveyResultBySurveyIdRepository returns null', async () => {
+    const { sut, findSurveyResultBySurveyIdRepositoryStub } = makeSut()
+    jest.spyOn(findSurveyResultBySurveyIdRepositoryStub, 'findBySurveyId').mockResolvedValueOnce(null)
+    const result = await sut.get('any_survey_id')
+    expect(result).toEqual(mockEmptySurveyResultModel())
   })
 
   test('Should return a surveyResult on success', async () => {
