@@ -31,6 +31,11 @@ export class MongoQueryBuilder {
     return this
   }
 
+  sort (data: object): MongoQueryBuilder {
+    this.query.push({ $sort: data })
+    return this
+  }
+
   build (): object[] {
     return this.query
   }
