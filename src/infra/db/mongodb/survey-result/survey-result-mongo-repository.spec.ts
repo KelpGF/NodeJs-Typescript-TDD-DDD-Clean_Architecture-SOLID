@@ -46,14 +46,13 @@ describe('SurveyResult MongoRepository', () => {
     test('Should add a survey result if its new', async () => {
       const sut = makeSut()
       const saveSurveyResultModel = await mockSaveSurveyResultModel()
-      const surveyResult = await sut.save(saveSurveyResultModel)
+      await sut.save(saveSurveyResultModel)
+      const surveyResult = await surveyResultCollection.findOne({
+        surveyId: new ObjectId(saveSurveyResultModel.surveyId),
+        accountId: new ObjectId(saveSurveyResultModel.accountId)
+      })
       expect(surveyResult).toBeTruthy()
-      expect(surveyResult.answers[0].count).toBe(1)
-      expect(surveyResult.answers[0].percent).toBe(100)
-      expect(surveyResult.answers[0].answer).toBe('any_answer')
-      expect(surveyResult.answers[1].count).toBe(0)
-      expect(surveyResult.answers[1].percent).toBe(0)
-      expect(surveyResult.answers[1].answer).toBe('other_answer')
+      expect(surveyResult?.answer).toBe('any_answer')
     })
 
     test('Should update survey result if its not new', async () => {
@@ -66,14 +65,13 @@ describe('SurveyResult MongoRepository', () => {
         answer: 'any_answer'
       })
       const sut = makeSut()
-      const surveyResult = await sut.save({ accountId, surveyId, date: new Date(), answer: 'other_answer' })
-      expect(surveyResult).toBeTruthy()
-      expect(surveyResult.answers[0].count).toBe(1)
-      expect(surveyResult.answers[0].percent).toBe(100)
-      expect(surveyResult.answers[0].answer).toBe('other_answer')
-      expect(surveyResult.answers[1].count).toBe(0)
-      expect(surveyResult.answers[1].percent).toBe(0)
-      expect(surveyResult.answers[1].answer).toBe('any_answer')
+      await sut.save({ accountId, surveyId, date: new Date(), answer: 'other_answer' })
+      const surveyResults = await surveyResultCollection.find({
+        surveyId: new ObjectId(surveyId),
+        accountId: new ObjectId(accountId)
+      }).toArray()
+      expect(surveyResults.length).toBe(1)
+      expect(surveyResults[0].answer).toBe('other_answer')
     })
   })
 

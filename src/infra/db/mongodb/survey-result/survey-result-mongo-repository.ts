@@ -6,16 +6,13 @@ import { FindSurveyResultBySurveyIdRepository } from '@/data/protocols/db/survey
 import { ObjectId } from 'mongodb'
 
 export class SurveyResultMongoRepository implements SaveSurveyResultRepository, FindSurveyResultBySurveyIdRepository {
-  async save ({ accountId, surveyId, answer, date }: SaveSurveyResultParams): Promise<SurveyResultModel> {
+  async save ({ accountId, surveyId, answer, date }: SaveSurveyResultParams): Promise<void> {
     const surveyResultCollection = await MongoHelper.getCollection('surveyResults')
     await surveyResultCollection.findOneAndUpdate(
       { accountId: new ObjectId(accountId), surveyId: new ObjectId(surveyId) },
       { $set: { answer, date } },
       { upsert: true }
     )
-
-    const surveyResult = (await this.findBySurveyId(surveyId)) as SurveyResultModel
-    return surveyResult
   }
 
   async findBySurveyId (surveyId: string): Promise<SurveyResultModel | null> {
