@@ -17,12 +17,11 @@ export class DbGetSurveyResult implements GetSurveyResult {
     if (surveyResult) return surveyResult
 
     const survey: SurveyModel = await this.findSurveyByIdRepository.findById(surveyId) as SurveyModel
-
     return {
       surveyId: survey.id,
       date: survey.date,
       question: survey.question,
-      answers: []
+      answers: survey.answers.map((answer) => Object.assign({}, answer, { percent: 0, count: 0 }))
     }
   }
 }
