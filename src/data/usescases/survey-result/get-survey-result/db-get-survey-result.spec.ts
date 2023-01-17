@@ -1,5 +1,6 @@
 import { DbGetSurveyResult } from './db-get-survey-result'
 import { FindSurveyResultBySurveyIdRepository } from './db-get-survey-result-protocols'
+import { mockSurveyResultModel } from '@/domain/test'
 import { mockFindSurveyResultBySurveyIdRepository } from '@/data/test'
 import MockDate from 'mockdate'
 
@@ -35,5 +36,11 @@ describe('DbGetSurveyResult UseCase', () => {
     jest.spyOn(findSurveyResultBySurveyIdRepositoryStub, 'findBySurveyId').mockRejectedValueOnce(new Error())
     const promise = sut.get('any_survey_id')
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return a surveyResult on success', async () => {
+    const { sut } = makeSut()
+    const result = await sut.get('any_survey_id')
+    expect(result).toEqual(mockSurveyResultModel())
   })
 })
