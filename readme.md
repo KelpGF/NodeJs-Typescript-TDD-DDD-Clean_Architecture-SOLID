@@ -50,6 +50,7 @@ Patterns para resolver alguns problemas comuns.
 * Decorator
 * Proxy
 * Dependency Injection
+* Builder
 * Singleton
 
 > ## Metodologias e Designs
@@ -146,6 +147,7 @@ Patterns para resolver alguns problemas comuns.
 * Mocks
 * Stubs
 * Spies
+* Fakes
 
 > ## Features do MongoDb
 
@@ -156,4 +158,4 @@ Patterns para resolver alguns problemas comuns.
 * DeleteMany
 * UpdateOne
 * ObjectId
-* Upsert e ReturnOriginal
+* Upsert e ReturnDocument
