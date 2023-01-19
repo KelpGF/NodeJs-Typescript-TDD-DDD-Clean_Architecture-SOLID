@@ -1,4 +1,5 @@
-import { Controller, HttpRequest, HttpResponse, ok, SearchSurveyById } from './get-survey-result-by-survey-id-controller-protocols'
+import { InvalidParamError } from '@/presentation/errors'
+import { Controller, forbidden, HttpRequest, HttpResponse, ok, SearchSurveyById } from './get-survey-result-by-survey-id-controller-protocols'
 
 export class GetSurveyResultBySurveyId implements Controller {
   constructor (
@@ -7,7 +8,9 @@ export class GetSurveyResultBySurveyId implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const surveyId = httpRequest.params?.surveyId
-    await this.searchSurveyById.searchById(surveyId)
+    const survey = await this.searchSurveyById.searchById(surveyId)
+    if (!survey) return forbidden(new InvalidParamError('surveyId'))
+
     return ok({})
   }
 }
