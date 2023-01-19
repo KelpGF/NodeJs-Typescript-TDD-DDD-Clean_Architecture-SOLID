@@ -53,4 +53,11 @@ describe('GetSurveyResult Controller', () => {
     await sut.handle(httpRequest)
     expect(searchSpy).toHaveBeenCalledWith(httpRequest.params.surveyId)
   })
+
+  test('Should return 500 if GetSurveyResult throws', async () => {
+    const { sut, getSurveyResultStub } = makeSut()
+    jest.spyOn(getSurveyResultStub, 'get').mockRejectedValueOnce(new Error())
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(internalServerError(new Error()))
+  })
 })
