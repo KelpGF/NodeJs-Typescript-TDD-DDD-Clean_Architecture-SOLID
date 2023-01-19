@@ -1,9 +1,10 @@
 import { InvalidParamError } from '@/presentation/errors'
-import { Controller, forbidden, HttpRequest, HttpResponse, internalServerError, ok, SearchSurveyById } from './get-survey-result-controller-protocols'
+import { Controller, forbidden, GetSurveyResult, HttpRequest, HttpResponse, internalServerError, ok, SearchSurveyById } from './get-survey-result-controller-protocols'
 
-export class GetSurveyResult implements Controller {
+export class GetSurveyResultController implements Controller {
   constructor (
-    private readonly searchSurveyById: SearchSurveyById
+    private readonly searchSurveyById: SearchSurveyById,
+    private readonly getSurveyResult: GetSurveyResult
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -11,6 +12,8 @@ export class GetSurveyResult implements Controller {
       const surveyId = httpRequest.params?.surveyId
       const survey = await this.searchSurveyById.searchById(surveyId)
       if (!survey) return forbidden(new InvalidParamError('surveyId'))
+
+      await this.getSurveyResult.get(surveyId)
 
       return ok({})
     } catch (error) {
