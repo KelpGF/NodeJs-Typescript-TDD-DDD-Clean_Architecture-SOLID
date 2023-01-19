@@ -1,5 +1,5 @@
-import { GetSurveyResultBySurveyId } from './get-survey-result-by-survey-id-controller'
-import { forbidden, internalServerError } from './get-survey-result-by-survey-id-controller-protocols'
+import { GetSurveyResult } from './get-survey-result-controller'
+import { forbidden, internalServerError } from './get-survey-result-controller-protocols'
 import { SearchSurveyById } from '@/domain/usecases/survey/search-survey-by-id'
 import { HttpRequest } from '@/presentation/protocols/http'
 import { InvalidParamError } from '@/presentation/errors'
@@ -11,17 +11,17 @@ const mockRequest = (): HttpRequest => ({
 })
 
 type SutTypes = {
-  sut: GetSurveyResultBySurveyId
+  sut: GetSurveyResult
   searchSurveyByIdStub: SearchSurveyById
 }
 const makeSut = (): SutTypes => {
   const searchSurveyByIdStub = mockSearchSurveyById()
-  const sut = new GetSurveyResultBySurveyId(searchSurveyByIdStub)
+  const sut = new GetSurveyResult(searchSurveyByIdStub)
 
   return { sut, searchSurveyByIdStub }
 }
 
-describe('GetSurveyResultBySurveyId Controller', () => {
+describe('GetSurveyResult Controller', () => {
   test('Should call SearchSurveyById with correct surveyId', async () => {
     const { sut, searchSurveyByIdStub } = makeSut()
     const searchSpy = jest.spyOn(searchSurveyByIdStub, 'searchById')

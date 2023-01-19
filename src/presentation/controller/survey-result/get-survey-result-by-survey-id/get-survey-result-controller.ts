@@ -1,7 +1,7 @@
 import { InvalidParamError } from '@/presentation/errors'
-import { Controller, forbidden, HttpRequest, HttpResponse, internalServerError, ok, SearchSurveyById } from './get-survey-result-by-survey-id-controller-protocols'
+import { Controller, forbidden, HttpRequest, HttpResponse, internalServerError, ok, SearchSurveyById } from './get-survey-result-controller-protocols'
 
-export class GetSurveyResultBySurveyId implements Controller {
+export class GetSurveyResult implements Controller {
   constructor (
     private readonly searchSurveyById: SearchSurveyById
   ) {}
