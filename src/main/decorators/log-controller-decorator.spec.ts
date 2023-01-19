@@ -35,7 +35,7 @@ const mockRequest = (): HttpRequest => ({
     passwordConfirmation: 'any_pass'
   }
 })
-const makeFakeInternalServerError = (): HttpResponse => {
+const mockInternalServerError = (): HttpResponse => {
   const fakeError = new Error()
   fakeError.stack = 'any_stack'
   return internalServerError(fakeError)
@@ -63,7 +63,7 @@ describe('Log Controller Decorator', () => {
     const { sut, stubController, stubLogErrorRepository } = makeSut()
     const httpRequest = mockRequest()
     const logSpy = jest.spyOn(stubLogErrorRepository, 'logError')
-    jest.spyOn(stubController, 'handle').mockResolvedValueOnce(makeFakeInternalServerError())
+    jest.spyOn(stubController, 'handle').mockResolvedValueOnce(mockInternalServerError())
 
     await sut.handle(httpRequest)
     expect(logSpy).toHaveBeenCalledWith('any_stack')
