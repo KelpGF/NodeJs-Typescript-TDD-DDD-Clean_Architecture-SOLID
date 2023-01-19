@@ -1,7 +1,7 @@
 
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { sign } from 'jsonwebtoken'
-import { Collection } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 import request from 'supertest'
 import app from '../config/app'
 import env from '../config/env'
@@ -53,6 +53,32 @@ describe('Survey Routes', () => {
 
   afterAll(async () => {
     await MongoHelper.disconnect()
+  })
+
+  describe('GET /surveys/:surveyId/results', () => {
+    test('Should return 403 on get survey result without accessToken', async () => {
+      await request(app)
+        .get('/api/surveys/any_id/results')
+        .expect(403)
+    })
+
+    test('Should return 403 on get survey result invalid survey id provided', async () => {
+      const accessToken = await makeFakeAccessToken()
+      await request(app)
+        .get(`/api/surveys/${new ObjectId().toString()}/results`)
+        .set('x-access-token', accessToken)
+        .expect(403)
+    })
+
+    test('Should return 200 on get survey result success', async () => {
+      const accessToken = await makeFakeAccessToken()
+      const surveyId = await makeFakeSurveyId()
+      await request(app)
+        .get(`/api/surveys/${surveyId.toString()}/results`)
+        .set('x-access-token', accessToken)
+        .send({ answer: 'Answer 1' })
+        .expect(200)
+    })
   })
 
   describe('PUT /surveys/:surveyId/results', () => {
