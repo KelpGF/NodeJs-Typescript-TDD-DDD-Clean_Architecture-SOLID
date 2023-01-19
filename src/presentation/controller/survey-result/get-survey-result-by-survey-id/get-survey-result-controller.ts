@@ -13,9 +13,8 @@ export class GetSurveyResultController implements Controller {
       const survey = await this.searchSurveyById.searchById(surveyId)
       if (!survey) return forbidden(new InvalidParamError('surveyId'))
 
-      await this.getSurveyResult.get(surveyId)
-
-      return ok({})
+      const surveyResult = await this.getSurveyResult.get(surveyId)
+      return ok(surveyResult)
     } catch (error) {
       return internalServerError(error)
     }
