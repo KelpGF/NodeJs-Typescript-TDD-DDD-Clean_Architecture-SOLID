@@ -1,9 +1,9 @@
-import { GetSurveyResult } from './get-survey-result-controller'
-import { forbidden, internalServerError } from './get-survey-result-controller-protocols'
+import { GetSurveyResultController } from './get-survey-result-controller'
+import { forbidden, GetSurveyResult, internalServerError } from './get-survey-result-controller-protocols'
 import { SearchSurveyById } from '@/domain/usecases/survey/search-survey-by-id'
 import { HttpRequest } from '@/presentation/protocols/http'
 import { InvalidParamError } from '@/presentation/errors'
-import { mockSearchSurveyById } from '@/presentation/test'
+import { mockGetSurveyResult, mockSearchSurveyById } from '@/presentation/test'
 
 const mockRequest = (): HttpRequest => ({
   accountId: 'any_account_id',
@@ -11,14 +11,16 @@ const mockRequest = (): HttpRequest => ({
 })
 
 type SutTypes = {
-  sut: GetSurveyResult
+  sut: GetSurveyResultController
   searchSurveyByIdStub: SearchSurveyById
+  getSurveyResultStub: GetSurveyResult
 }
 const makeSut = (): SutTypes => {
   const searchSurveyByIdStub = mockSearchSurveyById()
-  const sut = new GetSurveyResult(searchSurveyByIdStub)
+  const getSurveyResultStub = mockGetSurveyResult()
+  const sut = new GetSurveyResultController(searchSurveyByIdStub, getSurveyResultStub)
 
-  return { sut, searchSurveyByIdStub }
+  return { sut, searchSurveyByIdStub, getSurveyResultStub }
 }
 
 describe('GetSurveyResult Controller', () => {
@@ -42,5 +44,13 @@ describe('GetSurveyResult Controller', () => {
     jest.spyOn(searchSurveyByIdStub, 'searchById').mockRejectedValueOnce(new Error())
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(internalServerError(new Error()))
+  })
+
+  test('Should call GetSurveyResult with correct surveyId', async () => {
+    const { sut, getSurveyResultStub } = makeSut()
+    const searchSpy = jest.spyOn(getSurveyResultStub, 'get')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(searchSpy).toHaveBeenCalledWith(httpRequest.params.surveyId)
   })
 })
