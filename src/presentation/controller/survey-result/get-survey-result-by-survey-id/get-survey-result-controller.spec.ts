@@ -1,9 +1,11 @@
 import { GetSurveyResultController } from './get-survey-result-controller'
-import { forbidden, GetSurveyResult, internalServerError } from './get-survey-result-controller-protocols'
+import { forbidden, GetSurveyResult, internalServerError, ok } from './get-survey-result-controller-protocols'
 import { SearchSurveyById } from '@/domain/usecases/survey/search-survey-by-id'
 import { HttpRequest } from '@/presentation/protocols/http'
 import { InvalidParamError } from '@/presentation/errors'
 import { mockGetSurveyResult, mockSearchSurveyById } from '@/presentation/test'
+import { mockSurveyResultModel } from '@/domain/test'
+import MockDate from 'mockdate'
 
 const mockRequest = (): HttpRequest => ({
   accountId: 'any_account_id',
@@ -24,6 +26,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('GetSurveyResult Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call SearchSurveyById with correct surveyId', async () => {
     const { sut, searchSurveyByIdStub } = makeSut()
     const searchSpy = jest.spyOn(searchSurveyByIdStub, 'searchById')
@@ -59,5 +69,11 @@ describe('GetSurveyResult Controller', () => {
     jest.spyOn(getSurveyResultStub, 'get').mockRejectedValueOnce(new Error())
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(internalServerError(new Error()))
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(ok(mockSurveyResultModel()))
   })
 })
