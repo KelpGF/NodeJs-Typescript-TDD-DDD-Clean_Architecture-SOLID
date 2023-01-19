@@ -1,9 +1,9 @@
-import { SearchSurveyById } from '@/domain/usecases/survey/search-survey-by-id'
-import { mockSearchSurveyById } from '@/presentation/test'
-import { HttpRequest } from '@/presentation/protocols/http'
 import { GetSurveyResultBySurveyId } from './get-survey-result-by-survey-id-controller'
-import { forbidden } from './get-survey-result-by-survey-id-controller-protocols'
+import { forbidden, internalServerError } from './get-survey-result-by-survey-id-controller-protocols'
+import { SearchSurveyById } from '@/domain/usecases/survey/search-survey-by-id'
+import { HttpRequest } from '@/presentation/protocols/http'
 import { InvalidParamError } from '@/presentation/errors'
+import { mockSearchSurveyById } from '@/presentation/test'
 
 const mockRequest = (): HttpRequest => ({
   accountId: 'any_account_id',
@@ -35,5 +35,12 @@ describe('GetSurveyResultBySurveyId Controller', () => {
     jest.spyOn(searchSurveyByIdStub, 'searchById').mockResolvedValueOnce(null)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')))
+  })
+
+  test('Should return 500 if SearchSurveyById throws', async () => {
+    const { sut, searchSurveyByIdStub } = makeSut()
+    jest.spyOn(searchSurveyByIdStub, 'searchById').mockRejectedValueOnce(new Error())
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(internalServerError(new Error()))
   })
 })
